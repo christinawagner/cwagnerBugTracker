@@ -1,14 +1,13 @@
 namespace cwagnerBugTracker.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
     using cwagnerBugTracker.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using Domain;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<cwagnerBugTracker.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -22,21 +21,25 @@ namespace cwagnerBugTracker.Migrations
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
 
-            if (!context.Roles.Any(r => r.Name == "Admin"))
+            if (!context.Roles.Any(r => r.Name == Roles.Admin))
             {
-                roleManager.Create(new IdentityRole { Name = "Admin" });
+                roleManager.Create(new IdentityRole { Name = Roles.Admin });
             }
-            if (!context.Roles.Any(r => r.Name == "ProjectManager"))
+            if (!context.Roles.Any(r => r.Name == Roles.ProjectManager))
             {
-                roleManager.Create(new IdentityRole { Name = "ProjectManager" });
+                roleManager.Create(new IdentityRole { Name = Roles.ProjectManager});
             }
-            if (!context.Roles.Any(r => r.Name == "Developer"))
+            if (!context.Roles.Any(r => r.Name == Roles.Developer))
             {
-                roleManager.Create(new IdentityRole { Name = "Developer" });
+                roleManager.Create(new IdentityRole { Name = Roles.Developer});
             }
-            if (!context.Roles.Any(r => r.Name == "Submitter"))
+            if (!context.Roles.Any(r => r.Name == Roles.Submitter))
             {
-                roleManager.Create(new IdentityRole { Name = "Submitter" });
+                roleManager.Create(new IdentityRole { Name = Roles.Submitter});
+            }
+            if (!context.Roles.Any(r => r.Name == Roles.Super))
+            {
+                roleManager.Create(new IdentityRole { Name = Roles.Super});
             }
 
             if (!context.Users.Any(u => u.Email == "cwagner0604@gmail.com"))
@@ -75,7 +78,7 @@ namespace cwagnerBugTracker.Migrations
                 {
                     UserName = "admin@demo.com",
                     Email = "admin@demo.com",
-                    FirstName = "Admin",
+                    FirstName = Roles.Admin.ToString(),
                     LastName = "Demo",
                 }, "Password1!");
             }
@@ -95,7 +98,7 @@ namespace cwagnerBugTracker.Migrations
                 {
                     UserName = "developer@demo.com",
                     Email = "developer@demo.com",
-                    FirstName = "Developer",
+                    FirstName = Roles.Developer.ToString(),
                     LastName = "Demo",
                 }, "Password1!");
             }
@@ -105,26 +108,39 @@ namespace cwagnerBugTracker.Migrations
                 {
                     UserName = "submitter@demo.com",
                     Email = "submitter@demo.com",
-                    FirstName = "Submitter",
+                    FirstName = Roles.Submitter.ToString(),
                     LastName = "Demo",
+                }, "Password1!");
+            }
+            if (!context.Users.Any(u => u.Email == "super@user.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "super@user.com",
+                    Email = "super@user.com",
+                    FirstName = Roles.Super.ToString(),
+                    LastName = "User",
                 }, "Password1!");
             }
 
             var adminUserId = userManager.FindByEmail("cwagner0604@gmail.com").Id;
-            userManager.AddToRole(adminUserId, "Admin");
+            userManager.AddToRole(adminUserId, Roles.Admin);
             var adminUserId1 = userManager.FindByEmail("mjaang@coderfoundry.com").Id;
-            userManager.AddToRole(adminUserId1, "Admin");
+            userManager.AddToRole(adminUserId1, Roles.Admin);
             var adminUserId2 = userManager.FindByEmail("rchapman@coderfoundry.com").Id;
-            userManager.AddToRole(adminUserId2, "Admin");
+            userManager.AddToRole(adminUserId2, Roles.Admin);
             //demo users
             var admin = userManager.FindByEmail("admin@demo.com").Id;
-            userManager.AddToRole(admin, "Admin");
+            userManager.AddToRole(admin, Roles.Admin);
             var projectManager = userManager.FindByEmail("projectManager@demo.com").Id;
-            userManager.AddToRole(projectManager, "ProjectManager");
+            userManager.AddToRole(projectManager, Roles.ProjectManager);
             var developer = userManager.FindByEmail("developer@demo.com").Id;
-            userManager.AddToRole(projectManager, "Developer");
+            userManager.AddToRole(projectManager, Roles.Developer);
             var submitter = userManager.FindByEmail("submitter@demo.com").Id;
-            userManager.AddToRole(submitter, "Submitter");
+            userManager.AddToRole(submitter, Roles.Submitter);
+            //superuser *just in case*
+            var super = userManager.FindByEmail("super@user.com").Id;
+            userManager.AddToRole(super, Roles.Super);
 
             //ticket priorities
             if (!context.TicketPriorities.Any(p => p.Name == "Low"))
@@ -161,6 +177,14 @@ namespace cwagnerBugTracker.Migrations
             }
 
             //ticket status
+            if (!context.TicketStatuses.Any(p => p.Name == "Unassigned"))
+            {
+                var status = new TicketStatus
+                {
+                    Name = "Open"
+                };
+                context.TicketStatuses.Add(status);
+            }
             if (!context.TicketStatuses.Any(p => p.Name == "Open"))
             {
                 var status = new TicketStatus

@@ -1,0 +1,211 @@
+﻿@model cwagnerBugTracker.Models.Ticket
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ticket Details</h4>
+                <div>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.AssignToUser.FirstName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.AssignToUser.FirstName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.CreatedBy.FirstName)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.CreatedBy.FirstName)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Project.Title)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Project.Title)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketPriority.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketStatus.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.TicketType.Name)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TicketType.Name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Title)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Updated)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Updated)
+                        </dd>
+
+                    </dl>
+                </div>
+                <p>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                    @Html.ActionLink("Back to List", "Index")
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*COMMENTS*@
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Comments</h4>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    using (Html.BeginForm("CreateComment", "Tickets", new { TicketId = Model.Id }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input type="text" id="Body" name="Body" placeholder="Add a comment" />
+                            <div class="field text-center">
+                                <input type="submit" class="btn btn-lg btn-darker" />
+                            </div>
+                        </div>
+                    }
+                }
+
+                @foreach (var item in Model.Comments)
+                {
+                    <div class="row" data-id="@item.Id">
+                        <article id="01" class="post-block col-sm-12 post hentry"
+                                 data-animation-origin="top"
+                                 data-animation-duration="500"
+                                 data-animation-delay="500"
+                                 data-animation-distance="30px">
+                            <div id="comment-body-@item.Id">
+                                <p>@item.Body</p>
+                            </div>
+                            @*EDIT COMMENT*@
+                            <div id="editForm-@item.Id" style="display:none;">
+                                @using (Html.BeginForm("EditComment", "Tickets", null, FormMethod.Post))
+                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" value="@item.Id" name="Id" />
+
+                                    <div class="form-horizontal">
+                                        <div class="wpcf7-form">
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <div class="field">
+                                                <input type="text" id="Body" name="Body" value="@item.Body" />
+                                            </div>
+                                            <div class="dividewhite2"></div>
+                                            <div class="field text-center">
+                                                <button onclick="toggleCommentEdit(@item.Id)" type="button" class="btn btn-lg btn-light">Cancel</button>
+                                                <button type="submit" class="btn btn-lg btn-darker">Submit</button>
+                                                <div class="dividewhite2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="post-meta">
+                                Posted on: <a class="meta-date">@item.Created.ToString("d")</a>&nbsp;
+                                Posted by: <a class="meta-author">@item.Author.FullName</a>&nbsp;
+                                <div>
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                                    {
+                                        <a href="javascript:void(0)" onclick="toggleCommentEdit(@item.Id)">Edit</a> <span> | </span>;
+                                        <a href="javascript:void(0)" id="sa-warning" onclick="commentDelete(@item.Id, '@Url.Action("DeleteComment", "Tickets", new { id = item.Id }, null)')">Delete</a>;
+                                    }
+                                </div>
+                            </div>
+                            <hr />
+                        </article>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Attachments</h4>
+
+                @*FILE UPLOAD*@
+                @using (Html.BeginForm("CreateFile", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" value="@Model.Id" name="ticketId" />
+                        <input name="image" type="file" class="form-control" />
+                        <div class="field text-center">
+                            <input type="submit" class="btn btn-lg btn-darker" />
+                        </div>
+                }
+                @foreach (var item in Model.Attachments)
+                {
+                    <div class="row" data-attachment-id="@item.Id">
+                        @Html.ActionLink(item.FileName, "Download", "Tickets", new { item.Id }, new { target = "_blank" })
+                        <span>&nbsp; | &nbsp;</span>
+                        <a href="javascript:void(0)" id="sa-warning" onclick="attachmentDelete(@item.Id, '@Url.Action("DeleteAttachment", "Tickets", new { id = item.Id }, null)')">Delete</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/assets/javascript/editDeleteComments.js"></script>
+}

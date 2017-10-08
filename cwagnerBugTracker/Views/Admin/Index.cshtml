@@ -1,0 +1,53 @@
+﻿@model IEnumerable<cwagnerBugTracker.Helpers.AdminUserViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">All Users</h4>
+        <div class="table-responsive">
+            <table class="table stylish-table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(p => p.User.FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(p => p.User.Email)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(p => p.User.Projects)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(p => p.User.Roles)
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @user.User.FullName
+                        </td>
+                        <td>
+                            @user.User.Email
+                        </td>
+                        @*<td>
+                                @user.User.Projects
+                            </td>*@
+                        <td>
+                            @foreach (var role in user.SelectedRoles)
+                            {
+                                <p>@role</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Manage Roles", "EditUserRoles", new { id = user.User.Id })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

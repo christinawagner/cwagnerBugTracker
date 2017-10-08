@@ -12,9 +12,10 @@ namespace cwagnerBugTracker.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string TimeZone { get; set; }
         //if template has profile picture capability
         //public string ProfilePic { get; set; }
-
+        
         public string FullName
         {
             get
@@ -25,16 +26,18 @@ namespace cwagnerBugTracker.Models
 
         public ApplicationUser()
         {
-            Projects = new HashSet<Project>();
+            Tickets = new HashSet<Ticket>();
             Histories = new HashSet<TicketHistory>();
             Comments = new HashSet<TicketComment>();
             Attachments = new HashSet<TicketAttachment>();
+            Projects = new HashSet<Project>();
         }
 
-        public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
         public virtual ICollection<TicketHistory> Histories { get; set; }
         public virtual ICollection<TicketComment> Comments { get; set; }
         public virtual ICollection<TicketAttachment> Attachments { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -56,7 +59,7 @@ namespace cwagnerBugTracker.Models
         {
             return new ApplicationDbContext();
         }
-
+        
         public DbSet<Project> Projects { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketAttachment> TicketAttachments { get; set; }
@@ -65,5 +68,6 @@ namespace cwagnerBugTracker.Models
         public DbSet<TicketPriority> TicketPriorities { get; set; }
         public DbSet<TicketStatus> TicketStatuses { get; set; }
         public DbSet<TicketType> TicketTypes { get; set; }
+
     }
 }

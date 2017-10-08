@@ -1,0 +1,38 @@
+﻿@model cwagnerBugTracker.Models.ChangeNameViewModel
+@{
+    ViewBag.Title = "ChangeName";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                @using (Html.BeginForm("ChangeName", "Manage", FormMethod.Post, new { @class = "form-horizontal form-material", id = "loginform", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <h3 class="box-title m-b-20">Change your name.</h3>
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" name="@nameof(Model.UpdatedFirstName)" required="" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" name="@nameof(Model.UpdatedLastName)" required="" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group text-center m-t-20">
+                        <div class="col-md-3">
+                            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Change</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

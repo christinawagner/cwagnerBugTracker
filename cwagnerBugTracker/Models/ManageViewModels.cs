@@ -58,6 +58,19 @@ namespace cwagnerBugTracker.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ChangeNameViewModel
+    {
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "New First Name")]
+        public string UpdatedFirstName { get; set; }
+        
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "New Last Name")]
+        public string UpdatedLastName { get; set; }
+    }
+
     public class AddPhoneNumberViewModel
     {
         [Required]

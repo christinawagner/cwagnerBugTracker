@@ -61,6 +61,7 @@ namespace cwagnerBugTracker.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeNameSuccess ? "Your name has been changed."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -244,6 +245,38 @@ namespace cwagnerBugTracker.Controllers
             return View(model);
         }
 
+        // GET: Change Name
+        public ActionResult ChangeName()
+        {
+            return View();
+        }
+
+        //
+        // POST: Change Name
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeName(ChangeNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            user.FirstName = model.UpdatedFirstName;
+            user.LastName = model.UpdatedLastName;
+            var result = UserManager.Update(user);
+            if (result.Succeeded)
+            {
+                if (user != null)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeNameSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
         //
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
@@ -381,7 +414,8 @@ namespace cwagnerBugTracker.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            ChangeNameSuccess
         }
 
 #endregion

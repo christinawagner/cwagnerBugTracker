@@ -1,0 +1,47 @@
+﻿@model cwagnerBugTracker.Helpers.AdminUserViewModel
+
+@{
+    ViewBag.Title = "Edit User Roles";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Modify/Assign Roles For:</h4>
+
+                @using (Html.BeginForm("EditUserRoles", "Admin", FormMethod.Post))
+                {
+                    @Html.HiddenFor(model => model.User.Id)
+                    <h3>
+                        @Html.DisplayFor(model => model.User.FullName)
+                    </h3>
+                    @Html.ListBox("SelectedRoles", Model.Roles, new { @class = "multi-select" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Assign Users</button>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to User List", "Index")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/assets/multiselect/multiselect.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            "use strict";
+            $('.multi-select').multiSelect({
+                selectableHeader: "<div style='text-align: center; background-color: black; color: white'><strong>Available Roles</strong></div>",
+                selectionHeader: "<div style='text-align: center; background-color: black; color: white'><strong>User Roles</strong></div>"
+            });
+            $(".ms-container").append('<i class="glyph-icon icon-exchange"></i>');
+
+        });
+    </script>
+}

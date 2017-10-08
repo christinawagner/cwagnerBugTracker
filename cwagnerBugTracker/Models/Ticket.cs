@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -19,18 +20,24 @@ namespace cwagnerBugTracker.Models
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset? Updated { get; set; }
+        [DisplayName("Project")]
         public int ProjectId { get; set; }
+        [DisplayName("Type")]
         public int TicketTypeId { get; set; }
+        [DisplayName("Priority")]
         public int TicketPriorityId { get; set; }
+        [DisplayName("Status")]
         public int TicketStatusId { get; set; }
-        public string OwnerUserId { get; set; }
+        [DisplayName("Created By")]
+        public string CreatedById { get; set; }
+        [DisplayName("Assigned To")]
         public string AssignToUserId { get; set; }
 
         public virtual Project Project { get; set; }
         public virtual TicketType TicketType { get; set; }
         public virtual TicketPriority TicketPriority { get; set; }
         public virtual TicketStatus TicketStatus { get; set; }
-        public virtual ApplicationUser OwnerUser { get; set; }
+        public virtual ApplicationUser CreatedBy { get; set; }
         public virtual ApplicationUser AssignToUser { get; set; }
 
         public virtual ICollection<TicketComment> Comments { get; set; }
