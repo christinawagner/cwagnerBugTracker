@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TicketTypeId, "TicketTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.TicketTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 @Html.DropDownList("TicketTypeId", null, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.TicketTypeId, "", new { @class = "text-danger" })
@@ -42,13 +42,14 @@
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TicketPriorityId, "TicketPriorityId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.TicketPriorityId, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 @Html.DropDownList("TicketPriorityId", null, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.TicketPriorityId, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
+                        @Html.HiddenFor(model => model.Created)
                         @*<div class="form-group">
                                 @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
@@ -57,6 +58,7 @@
                                 </div>
                             </div>*@
 
+                        @Html.HiddenFor(model => model.Updated)
                         @*<div class="form-group">
                                 @Html.LabelFor(model => model.Updated, htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
@@ -65,6 +67,7 @@
                                 </div>
                             </div>*@
 
+                        @Html.HiddenFor(model => model.ProjectId)
                         @*<div class="form-group">
                                 @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
@@ -74,7 +77,7 @@
                             </div>*@
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.TicketStatusId, "TicketStatusId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.TicketStatusId, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager) || User.IsInRole(Domain.Roles.Super))
                 {
@@ -88,6 +91,7 @@
                             </div>
                         </div>
 
+                        @Html.HiddenFor(model => model.CreatedById)
                         @*<div class="form-group">
                                 @Html.LabelFor(model => model.OwnerUserId, "OwnerUserId", htmlAttributes: new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
@@ -98,11 +102,11 @@
 
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.AssignToUserId, "AssignToUserId", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.AssignToUserId, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager) || User.IsInRole(Domain.Roles.Super))
                 {
-                                    @Html.DropDownList("AssignToUserId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("AssignToUserId", null, "" , htmlAttributes: new { @class = "form-control" })
                                 }
                                 else
                                 {

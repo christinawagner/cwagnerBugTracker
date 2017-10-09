@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<cwagnerBugTracker.Models.Ticket>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tickets";
 }
 
 <div class="card">
     <div class="card-body">
-        <h2>Index</h2>
+        <h2>Tickets</h2>
 
-        <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
+        @if(User.IsInRole(Domain.Roles.Submitter) || User.IsInRole("Admin"))
+        {
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+        }
 
         @Html.Action("ListTicketsPartial", new { tickets = Model })
 

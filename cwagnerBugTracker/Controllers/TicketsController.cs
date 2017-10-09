@@ -95,7 +95,7 @@ namespace cwagnerBugTracker.Controllers
         }
 
         // GET: Tickets/Create
-        [AuthorizeRoles(Roles.Submitter)]
+        [AuthorizeRoles(Roles.Submitter, Roles.Admin)]
         public ActionResult Create()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
@@ -115,7 +115,7 @@ namespace cwagnerBugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AuthorizeRoles(Roles.Submitter)]
+        [AuthorizeRoles(Roles.Submitter, Roles.Admin)]
         public ActionResult Create([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,OwnerUserId")] Ticket ticket)
         {
 
@@ -203,7 +203,7 @@ namespace cwagnerBugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId")] Ticket ticket)
+        public ActionResult Edit(Ticket ticket)
         {
             if (ModelState.IsValid)
             {
@@ -214,7 +214,7 @@ namespace cwagnerBugTracker.Controllers
             }
 
             var projectUsers = GetAssignableUsers(ticket);
-            ViewBag.AssignToUserId = new SelectList(projectUsers, "Id", "FirstName", ticket.AssignToUserId);
+            ViewBag.AssignToUserId = new SelectList(projectUsers, "Id", "FullName", ticket.AssignToUserId);
             //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
             //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", ticket.ProjectId);
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
@@ -257,7 +257,7 @@ namespace cwagnerBugTracker.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Details", "Tickets", new { id = oldComment.TicketId });
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", ticketComment.AuthorId);
+            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FullName", ticketComment.AuthorId);
             ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketComment.TicketId);
             return View(ticketComment);
         }

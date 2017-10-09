@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -19,7 +20,7 @@ namespace cwagnerBugTracker.Models
         public DateTimeOffset? Updated { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        [DisplayName("Created By")]
+        [Display(Name = "Created By")]
         public string AuthorId { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }

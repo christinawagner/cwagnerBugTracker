@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -20,17 +21,17 @@ namespace cwagnerBugTracker.Models
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset? Updated { get; set; }
-        [DisplayName("Project")]
+        [Display(Name = "Project")]
         public int ProjectId { get; set; }
-        [DisplayName("Type")]
+        [Display(Name = "Type")]
         public int TicketTypeId { get; set; }
-        [DisplayName("Priority")]
+        [Display(Name = "Priority")]
         public int TicketPriorityId { get; set; }
-        [DisplayName("Status")]
+        [Display(Name = "Status")]
         public int TicketStatusId { get; set; }
-        [DisplayName("Created By")]
+        [Display(Name = "Created By")]
         public string CreatedById { get; set; }
-        [DisplayName("Assigned To")]
+        [Display(Name = "Assigned To")]
         public string AssignToUserId { get; set; }
 
         public virtual Project Project { get; set; }

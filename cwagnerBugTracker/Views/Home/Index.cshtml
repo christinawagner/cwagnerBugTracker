@@ -82,6 +82,14 @@
         $(document).ready(function () {
             $('#projectsTable').DataTable({
                 responsive: true,
+                "columnDefs": [{
+                    "visible": false,
+                    "targets": [2]
+                },
+                {
+                    "width": "15%",
+                    targets: [0, 3]
+                }]
             });
         });
     </script>

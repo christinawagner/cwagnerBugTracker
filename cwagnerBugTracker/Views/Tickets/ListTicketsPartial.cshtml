@@ -4,10 +4,10 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.AssignToUser.FullName)
+                    Assigned To
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreatedBy.FullName)
+                    Created By
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Project.Title)
@@ -44,7 +44,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AssignToUser.FullName)
+                        @(item.AssignToUser?.FullName ?? "Unassigned")
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreatedBy.FullName)
@@ -68,10 +68,10 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Created)
+                        @item.Created.ToString("d")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Updated)
+                        @(item.Updated?.ToString("d"))
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id })

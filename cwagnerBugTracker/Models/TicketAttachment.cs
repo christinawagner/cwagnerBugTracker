@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,13 +10,13 @@ namespace cwagnerBugTracker.Models
     public class TicketAttachment
     {
         public int Id { get; set; }
-        [DisplayName("Ticket")]
+        [Display(Name = "Ticket")]
         public int TicketId { get; set; }
         public string Description { get; set; }
         public DateTimeOffset Created { get; set; }
-        [DisplayName("Created By")]
+        [Display(Name = "Created By")]
         public string AuthorId { get; set; }
-        [DisplayName("File Name")]
+        [Display(Name = "File Name")]
         public string FileName { get; set; }
         
         public virtual Ticket Ticket { get; set; }

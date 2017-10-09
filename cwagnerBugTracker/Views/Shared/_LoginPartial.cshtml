@@ -1,22 +1,33 @@
 ﻿@using Microsoft.AspNet.Identity
+
+<ul class="dropdown-user">
+
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
-
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-        </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-    }
+    <li>
+        <div class="dw-user-box">
+            <div class="u-img"><img src="~/assets/images/users/1.jpg" alt="user"></div>
+            <div class="u-text">
+                <p class="text-muted">@User.Identity.GetUserName().Split('@')[0]</p>
+                @*<a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>*@
+            </div>
+        </div>
+    </li>
+    <li role="separator" class="divider"></li>
+    <li><a href="@Url.Action("Index", "Manage", routeValues: null)"><i class="ti-settings"></i>Account Setting</a></li>
+    <li role="separator" class="divider"></li>
+    <li>
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+            <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-power-off"></i> Logout</a>
+        }
+    </li>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+    <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
 }
+
+</ul>
