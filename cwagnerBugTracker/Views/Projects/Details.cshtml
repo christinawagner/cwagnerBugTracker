@@ -65,6 +65,10 @@
                         @user.FullName<br />
                     }
                 </div>
+                @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
+                {
+                    @Html.ActionLink("Edit Users", "EditProjectUsers", new { id = Model.Id })
+                }
             </div>
         </div>
     </div>

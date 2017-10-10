@@ -278,7 +278,11 @@ namespace cwagnerBugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateFile(TicketAttachment attachment, HttpPostedFileBase image)
         {
-            if (image != null && image.ContentLength > 0)
+            if(image == null)
+            {
+                ModelState.AddModelError("image", "Attachment file is required.");
+            }
+            else if (image != null && image.ContentLength > 0)
             {
                 //check the file extension from the file name to make sure it’s an image/file
                 var ext = Path.GetExtension(image.FileName).ToLower();

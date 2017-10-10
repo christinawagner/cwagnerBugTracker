@@ -183,7 +183,7 @@
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" value="@Model.Id" name="ticketId" />
-                    <input name="image" type="file" class="form-control" />
+                    <input name="image" type="file" class="form-control" required/>
                         <div class="field text-center">
                             <input type="submit" class="btn btn-lg btn-darker" />
                         </div>
