@@ -21,6 +21,7 @@ namespace cwagnerBugTracker.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private ProjectAssignHelper helper = new ProjectAssignHelper();
+        private HistoryHelper historyHelper = new HistoryHelper();
 
         // GET: All Tickets
         [AuthorizeRoles(Roles.Admin)]
@@ -34,7 +35,6 @@ namespace cwagnerBugTracker.Controllers
         {
             return PartialView(tickets);
         }
-
 
         // GET: Tickets
         public ActionResult Index()
@@ -75,19 +75,10 @@ namespace cwagnerBugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            if (User.IsInRole(Roles.Admin))
-            {
-                return View(ticket);
-            }
-            else if (User.IsInRole(Roles.ProjectManager) && helper.IsUserOnProject(user.Id, ticket.ProjectId))
-            {
-                return View(ticket);
-            }
-            else if (User.IsInRole(Roles.Developer) && ticket.AssignToUserId == user.Id)
-            {
-                return View(ticket);
-            }
-            else if (User.IsInRole(Roles.Submitter) && ticket.CreatedById == user.Id)
+            if (User.IsInRole(Roles.Admin)
+                || (User.IsInRole(Roles.ProjectManager) && helper.IsUserOnProject(user.Id, ticket.ProjectId))
+                || (User.IsInRole(Roles.Developer) && ticket.AssignToUserId == user.Id)
+                || (User.IsInRole(Roles.Submitter) && ticket.CreatedById == user.Id))
             {
                 return View(ticket);
             }
@@ -209,6 +200,11 @@ namespace cwagnerBugTracker.Controllers
             {
                 ticket.Updated = DateTimeOffset.UtcNow;
                 db.Entry(ticket).State = EntityState.Modified;
+
+                var oldTicket = db.Tickets.AsNoTracking().First(t => t.Id == ticket.Id);
+                var ticketHistories = historyHelper.AddToHistory(oldTicket, ticket, User.Identity.GetUserId());
+                db.TicketHistories.AddRange(ticketHistories);
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
