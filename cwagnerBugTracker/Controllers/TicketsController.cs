@@ -22,6 +22,7 @@ namespace cwagnerBugTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private ProjectAssignHelper helper = new ProjectAssignHelper();
         private HistoryHelper historyHelper = new HistoryHelper();
+        private NotificationHelper notificationHelper = new NotificationHelper();
 
         // GET: All Tickets
         [AuthorizeRoles(Roles.Admin)]
@@ -40,7 +41,7 @@ namespace cwagnerBugTracker.Controllers
         public ActionResult Index()
         {
             var user = db.Users.Find(User.Identity.GetUserId());
-            var tickets = db.Tickets.Include(t => t.AssignToUser).Include(t => t.CreatedBy).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+            var tickets = db.Tickets.Include(t => t.AssignToUser).Include(t => t.CreatedBy).Include(t => t.Project);
 
             if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.ProjectManager))
             {
@@ -95,9 +96,9 @@ namespace cwagnerBugTracker.Controllers
             //ViewBag.AssignToUserId = new SelectList(db.Users, "Id", "FirstName");
             //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
             ViewBag.ProjectId = new SelectList(helper.ListUserProjects(User.Identity.GetUserId()), "Id", "Title");
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
-            //ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name");
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name");
+
+            ViewBag.TicketPriority = new SelectList(TicketPriority.Low.ToSelectList(), "Value", "Text", TicketPriority.Low.ToString());
+            ViewBag.TicketType = new SelectList(TicketType.Bug.ToSelectList(), "Value", "Text", TicketType.Bug);
             return View();
         }
 
@@ -112,7 +113,7 @@ namespace cwagnerBugTracker.Controllers
 
             if (ModelState.IsValid)
             {
-                ticket.TicketStatusId = 4;
+                ticket.TicketStatus = TicketStatus.Unassigned;
                 ticket.CreatedById = User.Identity.GetUserId();
                 ticket.Created = DateTimeOffset.UtcNow;
                 db.Tickets.Add(ticket);
@@ -122,9 +123,9 @@ namespace cwagnerBugTracker.Controllers
 
             //ViewBag.AssignToUserId = new SelectList(db.Users, "Id", "FirstName", ticket.AssignToUserId);
             //ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
             ViewBag.ProjectId = new SelectList(helper.ListUserProjects(User.Identity.GetUserId()), "Id", "Title");
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name");
+            ViewBag.TicketPriority = new SelectList(ticket.TicketPriority.ToSelectList(), ticket.TicketPriority);
+            ViewBag.TicketType = new SelectList(ticket.TicketType.ToSelectList(), ticket.TicketType);
             return View(ticket);
         }
 
@@ -147,11 +148,11 @@ namespace cwagnerBugTracker.Controllers
             //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", ticket.ProjectId);
             if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.ProjectManager))
             {
-                ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
+                ViewBag.TicketStatus = new SelectList(Enum.GetValues(typeof(TicketStatus)), ticket.TicketStatus);
             }
             else
             {
-                ViewBag.TicketStatusId = new SelectList(new[] { ticket.TicketStatus }, "Id", "Name", ticket.TicketStatusId);
+                ViewBag.TicketStatusId = new SelectList(new[] { ticket.TicketStatus }, ticket.TicketStatus);
             }
 
             if (User.IsInRole(Roles.Admin)
@@ -159,15 +160,15 @@ namespace cwagnerBugTracker.Controllers
                 || (User.IsInRole(Roles.Developer) && ticket.AssignToUserId == user.Id)
                 || (User.IsInRole(Roles.Submitter) && ticket.CreatedById == user.Id))
             {
-                ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
+                ViewBag.TicketPriority = new SelectList(Enum.GetValues(typeof(TicketPriority)), ticket.TicketPriority);
             }
             else
             {
-                ViewBag.TicketPriorityId = new SelectList(new[] { ticket.TicketPriority }, "Id", "Name", ticket.TicketPriorityId);
+                ViewBag.TicketPriority = new SelectList(new[] { ticket.TicketPriority }, ticket.TicketPriority);
             }
 
             var projectUsers = GetAssignableUsers(ticket);
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+            ViewBag.TicketType = new SelectList(Enum.GetValues(typeof(TicketType)), ticket.TicketType);
             ViewBag.AssignToUserId = new SelectList(projectUsers, "Id", "FirstName", ticket.AssignToUserId);
             return View(ticket);
         }
@@ -202,20 +203,32 @@ namespace cwagnerBugTracker.Controllers
                 db.Entry(ticket).State = EntityState.Modified;
 
                 var oldTicket = db.Tickets.AsNoTracking().First(t => t.Id == ticket.Id);
-                var ticketHistories = historyHelper.AddToHistory(oldTicket, ticket, User.Identity.GetUserId());
-                db.TicketHistories.AddRange(ticketHistories);
+                var ticketHistory = historyHelper.GetHistory(oldTicket, ticket, User.Identity.GetUserId());
 
+                if (ticketHistory.Changes.Any())
+                {
+                    ticket.Histories.Add(ticketHistory);
+                    if (!String.IsNullOrWhiteSpace(ticket.AssignToUserId))
+                    {
+                        notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A change has been made to "
+                            + ticket.Title, true);
+                    }
+                }
+                if (oldTicket.AssignToUserId != ticket.AssignToUserId && !String.IsNullOrWhiteSpace(ticket.AssignToUserId))
+                {
+                    notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "You have been assigned to "
+                        + ticket.Title, true);
+                }
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             var projectUsers = GetAssignableUsers(ticket);
             ViewBag.AssignToUserId = new SelectList(projectUsers, "Id", "FullName", ticket.AssignToUserId);
-            //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
-            //ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Title", ticket.ProjectId);
-            ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Name", ticket.TicketPriorityId);
-            ViewBag.TicketStatusId = new SelectList(db.TicketStatuses, "Id", "Name", ticket.TicketStatusId);
-            ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Name", ticket.TicketTypeId);
+
+            ViewBag.TicketPriority = new SelectList(Enum.GetValues(typeof(TicketPriority)), ticket.TicketPriority);
+            ViewBag.TicketStatus = new SelectList(Enum.GetValues(typeof(TicketStatus)), ticket.TicketStatus);
+            ViewBag.TicketType = new SelectList(Enum.GetValues(typeof(TicketType)), ticket.TicketType);
             return View(ticket);
         }
 
@@ -231,6 +244,8 @@ namespace cwagnerBugTracker.Controllers
                 ticketComment.Created = DateTimeOffset.UtcNow;
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
+                notificationHelper.Notify(ticketComment.Ticket.AssignToUserId, "New Notification From BugTracker", "A comment has been added to " + 
+                    ticketComment.Ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
 
@@ -251,6 +266,8 @@ namespace cwagnerBugTracker.Controllers
                 oldComment.Body = ticketComment.Body;
                 db.Entry(oldComment).State = EntityState.Modified;
                 db.SaveChanges();
+                notificationHelper.Notify(ticketComment.Ticket.AssignToUserId, "New Notification From BugTracker", "A comment was edited in "
+                    + ticketComment.Ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = oldComment.TicketId });
             }
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FullName", ticketComment.AuthorId);
@@ -274,7 +291,7 @@ namespace cwagnerBugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateFile(TicketAttachment attachment, HttpPostedFileBase image)
         {
-            if(image == null)
+            if (image == null)
             {
                 ModelState.AddModelError("image", "Attachment file is required.");
             }
@@ -302,6 +319,8 @@ namespace cwagnerBugTracker.Controllers
                 }
                 db.TicketAttachments.Add(attachment);
                 db.SaveChanges();
+                notificationHelper.Notify(attachment.Ticket.AssignToUserId, "New Notification From BugTracker", "A file was added to "
+                    + attachment.Ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = attachment.TicketId });
             }
             return View(attachment);
@@ -312,7 +331,7 @@ namespace cwagnerBugTracker.Controllers
         {
             var attachment = db.TicketAttachments.Find(Id);
             var absPath = Server.MapPath(ConfigurationManager.AppSettings["UploadPath"]);
-            byte[] fileBytes = GetFile(Path.Combine(absPath,attachment.LocalFileName));
+            byte[] fileBytes = GetFile(Path.Combine(absPath, attachment.LocalFileName));
             var mimeType = MimeTypeMap.GetMimeType(Path.GetExtension(attachment.FileName));
             Response.AppendHeader("Content-Disposition", $"inline; filename={attachment.FileName}");
             return File(fileBytes, mimeType);

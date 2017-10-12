@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace cwagnerBugTracker.Models
 {
@@ -6,13 +8,18 @@ namespace cwagnerBugTracker.Models
     {
         public int Id { get; set; }
         public int TicketId { get; set; }
-        public string Property { get; set; }
-        public string OldValue { get; set; }
-        public string NewValue { get; set; }
         public DateTimeOffset Created { get; set; }
+        [Display(Name = "Change Made By")]
         public string AuthorId { get; set; }
 
         public virtual Ticket Ticket { get; set; }
         public virtual ApplicationUser Author { get; set; }
+
+        public virtual ICollection<HistoryChange> Changes { get; set; }
+
+        public TicketHistory()
+        {
+            Changes = new HashSet<HistoryChange>();
+        }
     }
 }

@@ -36,27 +36,27 @@
                         </dd>
 
                         <dt>
-                            @Html.DisplayNameFor(model => model.TicketPriority.Name)
+                            @Html.DisplayNameFor(model => model.TicketPriority)
                         </dt>
 
                         <dd>
-                            @Html.DisplayFor(model => model.TicketPriority.Name)
+                            @Html.DisplayFor(model => model.TicketPriority)
                         </dd>
 
                         <dt>
-                            @Html.DisplayNameFor(model => model.TicketStatus.Name)
+                            @Html.DisplayNameFor(model => model.TicketStatus)
                         </dt>
 
                         <dd>
-                            @Html.DisplayFor(model => model.TicketStatus.Name)
+                            @Html.DisplayFor(model => model.TicketStatus)
                         </dd>
 
                         <dt>
-                            @Html.DisplayNameFor(model => model.TicketType.Name)
+                            @Html.DisplayNameFor(model => model.TicketType)
                         </dt>
 
                         <dd>
-                            @Html.DisplayFor(model => model.TicketType.Name)
+                            @Html.DisplayFor(model => model.TicketType)
                         </dd>
 
                         <dt>
@@ -138,7 +138,7 @@
                             @*EDIT COMMENT*@
                             <div id="editForm-@item.Id" style="display:none;">
                                 @using (Html.BeginForm("EditComment", "Tickets", null, FormMethod.Post))
-                {
+                                {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" value="@item.Id" name="Id" />
 
@@ -183,10 +183,10 @@
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" value="@Model.Id" name="ticketId" />
-                    <input name="image" type="file" class="form-control" required/>
-                        <div class="field text-center">
-                            <input type="submit" class="btn btn-lg btn-darker" />
-                        </div>
+                    <input name="image" type="file" class="form-control" required />
+                    <div class="field text-center">
+                        <input type="submit" class="btn btn-lg btn-darker" />
+                    </div>
                 }
                 @foreach (var item in Model.Attachments)
                 {
@@ -199,6 +199,47 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ticket History</h4>
+                <div>
+                    <table id="editsTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Edited By
+                                </th>
+                                <th>
+                                    Edited On
+                                </th>
+                                <th>
+                                    Changes
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var history in Model.Histories)
+                                {
+                                <tr>
+                                    <td>@history.Author.FullName</td>
+                                    <td>@history.Created.ToString("d")</td>
+                                    <td>
+                                        @foreach (var change in history.Changes)
+                                            {
+                                            @($"{change.Property} changed from {change.OldValue} to {change.NewValue}")
+                                            <br />
+                                            }
+                                    </td>
+                                </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 @section Scripts{
