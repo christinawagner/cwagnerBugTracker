@@ -4199,6 +4199,7 @@
     <Content Include="Views\Tickets\ListTicketsPartial.cshtml" />
     <Content Include="Views\Projects\ListProjectsPartial.cshtml" />
     <Content Include="Views\Tickets\TicketHistoryPartial.cshtml" />
+    <Content Include="Views\Account\GuestLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
