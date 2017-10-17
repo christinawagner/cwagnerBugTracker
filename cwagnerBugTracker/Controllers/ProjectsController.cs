@@ -28,9 +28,9 @@ namespace cwagnerBugTracker.Controllers
             return View(userProjects);
         }
 
-        public PartialViewResult ListProjectsPartial(List<Project> projects)
+        public PartialViewResult ListProjectsPartial(List<Project> projects, bool showArchived = false)
         {
-            return PartialView(projects);
+            return PartialView(showArchived ? projects : projects.Where(p => !p.Archived).ToList());
         }
 
         // GET: Project list for all users
@@ -38,6 +38,13 @@ namespace cwagnerBugTracker.Controllers
         public ActionResult ProjectList()
         {
             return View(db.Projects.ToList());
+        }
+
+        //GET: Archived projects
+        [AuthorizeRoles(Roles.Admin, Roles.ProjectManager)]
+        public ActionResult ArchivedProjects()
+        {
+            return View(db.Projects.Where(p => p.Archived).ToList());
         }
 
         // GET: Projects/Details/5
@@ -150,7 +157,7 @@ namespace cwagnerBugTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeRoles(Roles.Admin, Roles.ProjectManager)]
-        public ActionResult Edit([Bind(Include = "Id,Created,Updated,Title,Description,AuthorId")] Project project)
+        public ActionResult Edit(Project project)
         {
             if (ModelState.IsValid)
             {

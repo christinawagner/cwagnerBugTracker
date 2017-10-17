@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
+@using cwagnerBugTracker.Extensions
 
 <ul class="dropdown-user">
 
@@ -6,9 +7,9 @@
 {
     <li>
         <div class="dw-user-box">
-            <div class="u-img"><img src="~/assets/images/users/1.jpg" alt="user"></div>
+j            <div class="u-img"><img src="~/assets/images/superman.jpg" alt="user"></div>
             <div class="u-text">
-                <p class="text-muted">@User.Identity.GetUserName().Split('@')[0]</p>
+                <p class="text-muted">@User.Identity.GetFullName()</p>
                 @*<a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>*@
             </div>
         </div>

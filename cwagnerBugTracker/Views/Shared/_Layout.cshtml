@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using cwagnerBugTracker.Extensions
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,12 +79,12 @@
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->
-                        <li class="nav-item hidden-sm-down search-box">
+                        @*<li class="nav-item hidden-sm-down search-box">
                             <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
                             <form class="app-search">
                                 <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
                             </form>
-                        </li>
+                        </li>*@
                         <!-- ============================================================== -->
                         <!-- Messages (DELETED - Windows icon, carousel, accordion, contact us...)-->
                         <!-- ============================================================== -->
@@ -138,7 +140,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="@Url.Action("Index", "Notifications")"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
                                 </ul>
                             </div>
@@ -153,7 +155,7 @@
                         <!-- Profile -->
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/assets/images/users/1.jpg" alt="user" class="profile-pic" /></a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/assets/images/superman.jpg" alt="user" class="profile-pic" /></a>
                             <div class="dropdown-menu dropdown-menu-right scale-up">
                                 @Html.Partial("_LoginPartial")                                
                             </div>
@@ -177,10 +179,10 @@
                 <!-- User profile -->
                 <div class="user-profile" @*style="background: url(~/assets/images/background/user-info.jpg) no-repeat;"*@>
                     <!-- User profile image -->
-                    <div class="profile-img"> <img src="~/assets/images/users/profile.png" alt="user" /> </div>
+                    <div class="profile-img"> <img src="~/assets/images/superman.jpg" alt="user" /> </div>
                     <!-- User profile text-->
                     <div class="profile-text">
-                        <a href="javascript:void(0)" style="cursor:default;">@User.Identity.GetUserName().Split('@')[0]</a>
+                        <a href="javascript:void(0)" style="cursor:default;">@User.Identity.GetFullName()</a>
                     </div>
                 </div>
                 <!-- End User profile text-->
@@ -193,6 +195,7 @@
                                 <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">VIEW ALL</span></a>
                                 <ul aria-expanded="false" class="collapse">
                                     <li><a class="waves-effect waves-dark" href="@Url.Action("ProjectList", "Projects")">Projects</a></li>
+                                    <li><a class="waves-effect waves-dark" href="@Url.Action("ArchivedProjects", "Projects")">Archived Projects</a></li>
                                     @if (!User.IsInRole(Domain.Roles.ProjectManager))
                                     {
                                         <li><a class="waves-effect waves-dark" href="@Url.Action("AllTickets", "Tickets")">Tickets</a></li>

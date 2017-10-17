@@ -28,7 +28,7 @@ namespace cwagnerBugTracker.Controllers
         [AuthorizeRoles(Roles.Admin)]
         public ActionResult AllTickets()
         {
-            var tickets = db.Tickets.Include(t => t.AssignToUser).Include(t => t.CreatedBy).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+            var tickets = db.Tickets.Include(t => t.AssignToUser).Include(t => t.CreatedBy).Include(t => t.Project);
             return View(tickets.ToList());
         }
 
@@ -152,7 +152,7 @@ namespace cwagnerBugTracker.Controllers
             }
             else
             {
-                ViewBag.TicketStatusId = new SelectList(new[] { ticket.TicketStatus }, ticket.TicketStatus);
+                ViewBag.TicketStatus = new SelectList(new[] { ticket.TicketStatus }, ticket.TicketStatus);
             }
 
             if (User.IsInRole(Roles.Admin)
@@ -218,6 +218,8 @@ namespace cwagnerBugTracker.Controllers
                 {
                     notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "You have been assigned to "
                         + ticket.Title, true);
+                    notificationHelper.Notify(oldTicket.AssignToUserId, "New Notification From BugTracker", "You have been unassigned from "
+                        + ticket.Title, true);
                 }
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -239,13 +241,14 @@ namespace cwagnerBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                Ticket ticket = db.Tickets.Find(ticketComment.TicketId);
                 var user = db.Users.Find(User.Identity.GetUserId());
                 ticketComment.AuthorId = user.Id;
                 ticketComment.Created = DateTimeOffset.UtcNow;
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
-                notificationHelper.Notify(ticketComment.Ticket.AssignToUserId, "New Notification From BugTracker", "A comment has been added to " + 
-                    ticketComment.Ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A comment has been added to " + 
+                    ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
 
@@ -261,13 +264,14 @@ namespace cwagnerBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                Ticket ticket = db.Tickets.Find(ticketComment.TicketId);
                 var oldComment = db.TicketComments.Find(ticketComment.Id);
                 oldComment.Updated = DateTimeOffset.UtcNow;
                 oldComment.Body = ticketComment.Body;
                 db.Entry(oldComment).State = EntityState.Modified;
                 db.SaveChanges();
-                notificationHelper.Notify(ticketComment.Ticket.AssignToUserId, "New Notification From BugTracker", "A comment was edited in "
-                    + ticketComment.Ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A comment was edited in "
+                    + ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = oldComment.TicketId });
             }
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FullName", ticketComment.AuthorId);
@@ -317,10 +321,11 @@ namespace cwagnerBugTracker.Controllers
                     attachment.LocalFileName = $"{Guid.NewGuid()}";
                     image.SaveAs(Path.Combine(absPath, attachment.LocalFileName)); //save image
                 }
+                Ticket ticket = db.Tickets.Find(attachment.TicketId);
                 db.TicketAttachments.Add(attachment);
                 db.SaveChanges();
-                notificationHelper.Notify(attachment.Ticket.AssignToUserId, "New Notification From BugTracker", "A file was added to "
-                    + attachment.Ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A file was added to "
+                    + ticket.Title, true);
                 return RedirectToAction("Details", "Tickets", new { id = attachment.TicketId });
             }
             return View(attachment);

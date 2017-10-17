@@ -9,89 +9,99 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Ticket Details</h4>
-                <div>
-                    <dl class="dl-horizontal">
-                        <dt>
-                            Assigned to
-                        </dt>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                Assigned to
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.AssignToUser.FullName)
-                        </dd>
+                            <td>
+                                @Html.DisplayFor(model => model.AssignToUser.FullName)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Created by
+                            </th>
 
-                        <dt>
-                            Created by
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.CreatedBy.FullName)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Project.Title)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.CreatedBy.FullName)
-                        </dd>
+                            <td>
+                                @Html.DisplayFor(model => model.Project.Title)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TicketPriority)
+                            </th>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Project.Title)
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.TicketPriority)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TicketStatus)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Project.Title)
-                        </dd>
+                            <td>
+                                @Html.DisplayFor(model => model.TicketStatus)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TicketType)
+                            </th>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.TicketPriority)
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.TicketType)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.TicketPriority)
-                        </dd>
+                            <td>
+                                @Html.DisplayFor(model => model.Title)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.TicketStatus)
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.Description)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.TicketStatus)
-                        </dd>
+                            <td>
+                                @Html.DisplayFor(model => model.Created)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Updated)
+                            </th>
 
-                        <dt>
-                            @Html.DisplayNameFor(model => model.TicketType)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.TicketType)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Title)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Description)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Description)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Created)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Created)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Updated)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Updated)
-                        </dd>
-
-                    </dl>
+                            <td>
+                                @Html.DisplayFor(model => model.Updated)
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <p>
                     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
@@ -116,7 +126,7 @@
 
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <input type="text" id="Body" name="Body" placeholder="Add a comment" />
+                            <input type="text" id="Body" name="Body" class="form-control" placeholder="Add a comment" />
                             <div class="field text-center">
                                 <input type="submit" class="btn btn-lg btn-darker" />
                             </div>
@@ -146,13 +156,11 @@
                                         <div class="wpcf7-form">
                                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                             <div class="field">
-                                                <input type="text" id="Body" name="Body" value="@item.Body" />
+                                                <input type="text" id="Body" name="Body" class="form-control" value="@item.Body" />
                                             </div>
-                                            <div class="dividewhite2"></div>
                                             <div class="field text-center">
                                                 <button onclick="toggleCommentEdit(@item.Id)" type="button" class="btn btn-lg btn-light">Cancel</button>
                                                 <button type="submit" class="btn btn-lg btn-darker">Submit</button>
-                                                <div class="dividewhite2"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -199,12 +207,13 @@
             </div>
         </div>
     </div>
+    @*TICKET HISTORY*@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Ticket History</h4>
-                <div>
-                    <table id="editsTable">
+                <div class="table-responsive m-t-40">
+                    <table class="table table-bordered table-striped" id="ticketHistoryTable" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>
@@ -220,30 +229,38 @@
                         </thead>
                         <tbody>
                             @foreach (var history in Model.Histories)
-                                {
+                            {
                                 <tr>
                                     <td>@history.Author.FullName</td>
                                     <td>@history.Created.ToString("d")</td>
                                     <td>
                                         @foreach (var change in history.Changes)
-                                            {
+                                        {
                                             @($"{change.Property} changed from {change.OldValue} to {change.NewValue}")
                                             <br />
-                                            }
+                                        }
                                     </td>
                                 </tr>
-                                }
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @section Scripts{
     <script src="~/assets/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/assets/javascript/editDeleteComments.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#ticketHistoryTable').DataTable({
+                responsive: true
+            });
+        });
+    </script>
 }
+

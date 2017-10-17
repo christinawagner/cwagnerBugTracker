@@ -8,18 +8,18 @@ namespace TimeZoneHelper
 {
     public static class TimeZoneHelper
     {
-        public static IHtmlString ToUserTime(this HtmlHelper helper, DateTimeOffset ModelTime, string timezone)
+        public static IHtmlString ToUserTime(this HtmlHelper helper, DateTimeOffset ModelTime, string timeZone)
         {
-            var timezoneId = TimeZoneInfo.FindSystemTimeZoneById(timezone);
-            var newTime = TimeZoneInfo.ConvertTime(ModelTime, timezoneId);
+            var timeZoneId = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+            var newTime = TimeZoneInfo.ConvertTime(ModelTime, timeZoneId);
             string htmlString = newTime.ToString();
             return new HtmlString(htmlString);
         }
 
-        public static IHtmlString ToUserTime(this HtmlHelper helper, DateTimeOffset ModelTime, string timezone,string ToStringFormat)
+        public static IHtmlString ToUserTime(this HtmlHelper helper, DateTimeOffset ModelTime, string timeZone,string ToStringFormat)
         {
-            var timezoneId = TimeZoneInfo.FindSystemTimeZoneById(timezone);
-            var newTime = TimeZoneInfo.ConvertTime(ModelTime, timezoneId);
+            var timeZoneId = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+            var newTime = TimeZoneInfo.ConvertTime(ModelTime, timeZoneId);
             string htmlString = newTime.ToString(ToStringFormat);
             return new HtmlString(htmlString);
         }

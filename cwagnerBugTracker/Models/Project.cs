@@ -22,6 +22,7 @@ namespace cwagnerBugTracker.Models
         public string Description { get; set; }
         [Display(Name = "Created By")]
         public string AuthorId { get; set; }
+        public bool Archived { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }

@@ -21,6 +21,12 @@ namespace cwagnerBugTracker.Migrations
             var userManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(context));
 
+            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = true
+            };
+
             if (!context.Roles.Any(r => r.Name == Roles.Admin))
             {
                 roleManager.Create(new IdentityRole { Name = Roles.Admin });
@@ -72,52 +78,52 @@ namespace cwagnerBugTracker.Migrations
                     LastName = "Chapman",
                 }, "Password1!");
             }
-            if (!context.Users.Any(u => u.Email == "admin@demo.com"))
+            if (!context.Users.Any(u => u.Email == "cwagner0604+admin@gmail.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "admin@demo.com",
-                    Email = "admin@demo.com",
+                    UserName = "cwagner0604+admin@gmail.com",
+                    Email = "cwagner0604+admin@gmail.com",
                     FirstName = Roles.Admin.ToString(),
                     LastName = "Demo",
                 }, "Password1!");
             }
-            if (!context.Users.Any(u => u.Email == "projectmanager@demo.com"))
+            if (!context.Users.Any(u => u.Email == "cwagner0604+projectmanager@gmail.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "projectmanager@demo.com",
-                    Email = "projectmanager@demo.com",
+                    UserName = "cwagner0604+projectmanager@gmail.com",
+                    Email = "cwagner0604+projectmanager@gmail.com",
                     FirstName = "Project Manager",
                     LastName = "Demo",
                 }, "Password1!");
             }
-            if (!context.Users.Any(u => u.Email == "developer@demo.com"))
+            if (!context.Users.Any(u => u.Email == "cwagner0604+developer@gmail.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "developer@demo.com",
-                    Email = "developer@demo.com",
+                    UserName = "cwagner0604+developer@gmail.com",
+                    Email = "cwagner0604+developer@gmail.com",
                     FirstName = Roles.Developer.ToString(),
                     LastName = "Demo",
                 }, "Password1!");
             }
-            if (!context.Users.Any(u => u.Email == "submitter@demo.com"))
+            if (!context.Users.Any(u => u.Email == "cwagner0604+submitter@gmail.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "submitter@demo.com",
-                    Email = "submitter@demo.com",
+                    UserName = "cwagner0604+submitter@gmail.com",
+                    Email = "cwagner0604+submitter@gmail.com",
                     FirstName = Roles.Submitter.ToString(),
                     LastName = "Demo",
                 }, "Password1!");
             }
-            if (!context.Users.Any(u => u.Email == "super@user.com"))
+            if (!context.Users.Any(u => u.Email == "cwagner0604+super@gmail.com"))
             {
                 userManager.Create(new ApplicationUser
                 {
-                    UserName = "super@user.com",
-                    Email = "super@user.com",
+                    UserName = "cwagner0604+super@gmail.com",
+                    Email = "cwagner0604+super@gmail.com",
                     FirstName = Roles.Super.ToString(),
                     LastName = "User",
                 }, "Password1!");
@@ -130,16 +136,16 @@ namespace cwagnerBugTracker.Migrations
             var adminUserId2 = userManager.FindByEmail("rchapman@coderfoundry.com").Id;
             userManager.AddToRole(adminUserId2, Roles.Admin);
             //demo users
-            var admin = userManager.FindByEmail("admin@demo.com").Id;
+            var admin = userManager.FindByEmail("cwagner0604+admin@gmail.com").Id;
             userManager.AddToRole(admin, Roles.Admin);
-            var projectManager = userManager.FindByEmail("projectManager@demo.com").Id;
+            var projectManager = userManager.FindByEmail("cwagner0604+projectmanager@gmail.com").Id;
             userManager.AddToRole(projectManager, Roles.ProjectManager);
-            var developer = userManager.FindByEmail("developer@demo.com").Id;
+            var developer = userManager.FindByEmail("cwagner0604+developer@gmail.com").Id;
             userManager.AddToRole(projectManager, Roles.Developer);
-            var submitter = userManager.FindByEmail("submitter@demo.com").Id;
+            var submitter = userManager.FindByEmail("cwagner0604+submitter@gmail.com").Id;
             userManager.AddToRole(submitter, Roles.Submitter);
             //superuser *just in case*
-            var super = userManager.FindByEmail("super@user.com").Id;
+            var super = userManager.FindByEmail("cwagner0604+super@gmail.com").Id;
             userManager.AddToRole(super, Roles.Super);
         }
     }

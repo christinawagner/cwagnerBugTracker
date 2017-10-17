@@ -31,6 +31,7 @@ namespace cwagnerBugTracker.Models
             Comments = new HashSet<TicketComment>();
             Attachments = new HashSet<TicketAttachment>();
             Projects = new HashSet<Project>();
+            Notifications = new HashSet<Notification>();
         }
 
         public virtual ICollection<Ticket> Tickets { get; set; }
@@ -38,12 +39,14 @@ namespace cwagnerBugTracker.Models
         public virtual ICollection<TicketComment> Comments { get; set; }
         public virtual ICollection<TicketAttachment> Attachments { get; set; }
         public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
+            userIdentity.AddClaim(new Claim("FullName", FullName));
             return userIdentity;
         }
     }

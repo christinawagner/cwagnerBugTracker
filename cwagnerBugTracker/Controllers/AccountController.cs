@@ -110,16 +110,16 @@ namespace cwagnerBugTracker.Controllers
             switch (role)
             {
                 case "Admin":
-                    user = db.Users.Single(s => s.Email == "Admin@demo.com");
+                    user = db.Users.Single(s => s.Email == "cwagner0604+admin@gmail.com");
                     break;
                 case "Project Manager":
-                    user = db.Users.Single(s => s.Email == "ProjectManager@demo.com");
+                    user = db.Users.Single(s => s.Email == "cwagner0604+projectmanager@gmail.com");
                     break;
                 case "Developer":
-                    user = db.Users.Single(s => s.Email == "Developer@demo.com");
+                    user = db.Users.Single(s => s.Email == "cwagner0604+developer@gmail.com");
                     break;
                 case "Submitter":
-                    user = db.Users.Single(s => s.Email == "Submitter@demo.com");
+                    user = db.Users.Single(s => s.Email == "cwagner0604+submitter@gmail.com");
                     break;
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
@@ -210,6 +210,8 @@ namespace cwagnerBugTracker.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            var timeZones = TimeZoneInfo.GetSystemTimeZones();
+            ViewBag.TimeZone = new SelectList(timeZones, "Id", "Id");
             return View(model);
         }
 

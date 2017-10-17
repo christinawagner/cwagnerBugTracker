@@ -15,9 +15,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="pull-right">
-                    @Html.ActionLink("See Complete List", "Index", "Projects")
+                    @Html.ActionLink("View Projects Page", "Index", "Projects")
                 </div>
-                <h4 class="card-title">Most Recent Projects</h4>
+                <h4 class="card-title">Projects</h4>
                 @Html.Action("ListProjectsPartial", "Projects", new { projects = Model.Projects })
             </div>
         </div>
@@ -56,9 +56,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="pull-right">
-                    @Html.ActionLink("See Complete List", "Index", "Tickets")
+                    @Html.ActionLink("View Ticket Page", "Index", "Tickets")
                 </div>
-                <h4 class="card-title">Most Recent Tickets</h4>
+                <h4 class="card-title">Tickets</h4>
                 @Html.Action("ListTicketsPartial", "Tickets", new { tickets = Model.Tickets })
 
             </div>

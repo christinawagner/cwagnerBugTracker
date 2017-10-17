@@ -8,44 +8,48 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <div>
-                    <h4 class="card-title">Details</h4>
+                <h4 class="card-title">Details</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </th>
 
-                    <dl class="dl-horizontal">
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Created)
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.Created)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Created)
-                        </dd>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </dt>
+                            <td>
+                                @Html.DisplayFor(model => model.Title)
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
 
-                        <dd>
-                            @Html.DisplayFor(model => model.Title)
-                        </dd>
-
-                        <dt>
-                            @Html.DisplayNameFor(model => model.Description)
-                        </dt>
-
-                        <dd>
-                            @Html.DisplayFor(model => model.Description)
-                        </dd>
-                    </dl>
+                            <td>
+                                @Html.DisplayFor(model => model.Description)
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <p>
                     @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <span> | </span>
-                        @Html.ActionLink("Back to List", "Index");
+                            @Html.ActionLink("Back to List", "Index");
                     }
                     else if (User.IsInRole(Domain.Roles.Submitter))
                     {
                         @Html.ActionLink("Create Ticket", "Create", "Tickets", new { id = Model.Id }, null) <span> | </span>
-                        @Html.ActionLink("Back to List", "Index");
+                            @Html.ActionLink("Back to List", "Index");
                     }
                     else
                     {
