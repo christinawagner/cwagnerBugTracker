@@ -1,0 +1,14 @@
+﻿@model IEnumerable<cwagnerBugTracker.Models.Notification>
+
+<table class="table table-hover no-wrap">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="unread">
+                <td>
+                    @Html.Raw(item.Message)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

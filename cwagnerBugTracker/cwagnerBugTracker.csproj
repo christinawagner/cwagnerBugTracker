@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44302</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -199,7 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Content Include="assets\images\superman.jpg" />
+    <Content Include="assets\profilePics\superman.jpg" />
     <Content Include="assets\javascript\editDeleteComments.js" />
     <Content Include="assets\multiselect\multiselect.css" />
     <Content Include="assets\multiselect\multiselect.js" />
@@ -812,6 +812,7 @@
     <Compile Include="Helpers\ProjectUserViewModel.cs" />
     <Compile Include="Helpers\TimeZoneHelper.cs" />
     <Compile Include="Helpers\UserRoleHelper.cs" />
+    <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EmailModel.cs" />
@@ -4209,15 +4210,15 @@
     <Content Include="Views\Tickets\AllTickets.cshtml" />
     <Content Include="Views\Tickets\ListTicketsPartial.cshtml" />
     <Content Include="Views\Projects\ListProjectsPartial.cshtml" />
-    <Content Include="Views\Tickets\TicketHistoryPartial.cshtml" />
     <Content Include="Views\Account\GuestLogin.cshtml" />
     <Content Include="Views\Projects\ArchivedProjects.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Notifications\NotificationsPartial.cshtml" />
+    <Content Include="Views\Tickets\TicketCounterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="assets\fileUploads\" />
-    <Folder Include="Hubs\" />
     <Folder Include="Views\TicketAttachments\" />
     <Folder Include="Views\TicketComments\" />
   </ItemGroup>
@@ -4258,7 +4259,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60089</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:60089/</IISUrl>
+          <IISUrl>https://localhost:44302/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

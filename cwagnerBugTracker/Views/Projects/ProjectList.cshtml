@@ -11,7 +11,11 @@
             @Html.ActionLink("Create New", "Create") <span> | </span>
             @Html.ActionLink("View archived projects", "ArchivedProjecs")
         </p>
-        @Html.Action("ListProjectsPartial", new { projects = Model })
+        <div class="table-responsive m-t-40">
+            <table class="table table-bordered table-striped" id="projectsTable" cellspacing="0" width="100%">
+                @Html.Action("ListProjectsPartial", new { projects = Model })
+            </table>
+        </div>
     </div>
 </div>
 

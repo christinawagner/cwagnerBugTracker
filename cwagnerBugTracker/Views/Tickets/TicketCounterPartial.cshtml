@@ -1,0 +1,21 @@
+﻿@model IEnumerable<cwagnerBugTracker.Models.Ticket>
+@using cwagnerBugTracker.Models;
+
+<div class="col-md-5 col-8 align-self-center">
+</div>
+<div class="col-md-7 col-4 align-self-center">
+    <div class="d-flex m-t-10 justify-content-end">
+        <div class="d-flex m-r-20 m-l-10 hidden-md-down">
+            <div class="chart-text m-r-10">
+                <h6 class="m-b-0"><small>OPEN TICKETS</small></h6>
+                <h4 class="m-t-0 text-info text-center">@Model.Where(t => t.TicketStatus != TicketStatus.Complete).Count()</h4>
+            </div>
+        </div>
+        <div class="d-flex m-r-20 m-l-10 hidden-md-down">
+            <div class="chart-text m-r-10">
+                <h6 class="m-b-0"><small>TOTAL TICKETS</small></h6>
+                <h4 class="m-t-0 text-primary text-center">@Model.Count()</h4>
+            </div>
+        </div>
+    </div>
+</div>

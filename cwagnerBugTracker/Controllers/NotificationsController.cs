@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     public class NotificationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -23,6 +24,12 @@ namespace cwagnerBugTracker.Controllers
             return View(notifications.ToList());
         }
 
+        public ActionResult NotificationsPartial()
+        {
+            var userId = User.Identity.GetUserId();
+            var notifications = db.Notifications.Include(n => n.Recipient).Where(n => n.RecipientId == userId);
+            return PartialView(notifications.OrderByDescending(s => s.Sent).Take(3).ToList());
+        }
 
         protected override void Dispose(bool disposing)
         {

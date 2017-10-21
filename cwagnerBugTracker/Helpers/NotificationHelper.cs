@@ -1,4 +1,6 @@
-﻿using cwagnerBugTracker.Models;
+﻿using cwagnerBugTracker.Hubs;
+using cwagnerBugTracker.Models;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Net.Mail;
 
@@ -11,6 +13,8 @@ namespace cwagnerBugTracker.Helpers
 
         public void Notify(string userId, string subject, string message, bool sendEmail)
         {
+            
+
             var notification = new Notification
             {
                 Subject = subject,
@@ -23,6 +27,8 @@ namespace cwagnerBugTracker.Helpers
             db.Notifications.Add(notification);
             db.SaveChanges();
 
+            NotificationHub.UpdateNotifications(userId);
+
             if (sendEmail)
             {
                 try
@@ -32,6 +38,7 @@ namespace cwagnerBugTracker.Helpers
                     var from = "CWagnerBugTracker<BugTrackerDONOTREPLY@email.com>";
                     var email = new MailMessage(from, user.Email)
                     {
+                        IsBodyHtml = true,
                         Subject = subject,
                         Body = message,
                     };

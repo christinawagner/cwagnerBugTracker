@@ -217,10 +217,10 @@
                         <thead>
                             <tr>
                                 <th>
-                                    Edited By
+                                    Edited On
                                 </th>
                                 <th>
-                                    Edited On
+                                    Edited By
                                 </th>
                                 <th>
                                     Changes
@@ -231,8 +231,8 @@
                             @foreach (var history in Model.Histories)
                             {
                                 <tr>
-                                    <td>@history.Author.FullName</td>
                                     <td>@history.Created.ToString("d")</td>
+                                    <td>@history.Author.FullName</td>
                                     <td>
                                         @foreach (var change in history.Changes)
                                         {

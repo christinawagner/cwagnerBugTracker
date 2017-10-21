@@ -13,6 +13,7 @@ using Domain;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ProjectsController : Controller
     {
@@ -161,6 +162,7 @@ namespace cwagnerBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Created = project.Created;
                 project.Updated = DateTimeOffset.UtcNow;
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();

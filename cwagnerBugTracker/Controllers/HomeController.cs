@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class HomeController : Controller
     {
@@ -22,21 +23,21 @@ namespace cwagnerBugTracker.Controllers
 
             var viewModel = new DashboardViewModel()
             {
-                Projects = user.Projects.OrderByDescending(p => p.Tickets.OrderByDescending(t => t.Created).Select(s => s.Created).FirstOrDefault()).ToList()
+                Projects = user.Projects.OrderByDescending(p => p.Tickets.OrderByDescending(t => t.Created).Select(s => s.Created).FirstOrDefault()).Take(3).ToList()
             };
 
             if(User.IsInRole(Roles.Admin) || User.IsInRole(Roles.ProjectManager))
             {
-                viewModel.Tickets = user.Projects.SelectMany(p => p.Tickets).ToList();
+                viewModel.Tickets = user.Projects.SelectMany(p => p.Tickets).Take(3).ToList();
             }
             else if(User.IsInRole(Roles.Developer))
             {
-                viewModel.Tickets = user.Tickets.ToList();
+                viewModel.Tickets = user.Tickets.Take(3).ToList();
             }
             else
             {
                 var userId = User.Identity.GetUserId();
-                viewModel.Tickets = db.Tickets.Where(t => t.CreatedById == userId).ToList();
+                viewModel.Tickets = db.Tickets.Where(t => t.CreatedById == userId).Take(3).ToList();
             }
 
             return View(viewModel);

@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     [AuthorizeRoles(Roles.Admin)]
     public class AdminController : Controller
     {

@@ -16,6 +16,7 @@ using MimeTypes;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class TicketsController : Controller
     {
@@ -23,6 +24,14 @@ namespace cwagnerBugTracker.Controllers
         private ProjectAssignHelper helper = new ProjectAssignHelper();
         private HistoryHelper historyHelper = new HistoryHelper();
         private NotificationHelper notificationHelper = new NotificationHelper();
+
+        //TICKET COUNTER
+        public ActionResult TicketCounter()
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            var tickets = db.Tickets.Where(t => t.AssignToUserId == user.Id);
+            return PartialView("TicketCounterPartial", tickets);
+        }
 
         // GET: All Tickets
         [AuthorizeRoles(Roles.Admin)]
@@ -199,27 +208,29 @@ namespace cwagnerBugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                ticket.Created = ticket.Created;
                 ticket.Updated = DateTimeOffset.UtcNow;
                 db.Entry(ticket).State = EntityState.Modified;
 
                 var oldTicket = db.Tickets.AsNoTracking().First(t => t.Id == ticket.Id);
                 var ticketHistory = historyHelper.GetHistory(oldTicket, ticket, User.Identity.GetUserId());
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Url.Scheme);
 
                 if (ticketHistory.Changes.Any())
                 {
                     ticket.Histories.Add(ticketHistory);
                     if (!String.IsNullOrWhiteSpace(ticket.AssignToUserId))
                     {
-                        notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A change has been made to "
-                            + ticket.Title, true);
+                        notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl 
+                            + "\">" + ticket.Title + " has changed.</a>", true);
                     }
                 }
                 if (oldTicket.AssignToUserId != ticket.AssignToUserId && !String.IsNullOrWhiteSpace(ticket.AssignToUserId))
                 {
-                    notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "You have been assigned to "
-                        + ticket.Title, true);
-                    notificationHelper.Notify(oldTicket.AssignToUserId, "New Notification From BugTracker", "You have been unassigned from "
-                        + ticket.Title, true);
+                    notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl 
+                        + "\">New assignment: " + ticket.Title + "</a>", true);
+                    notificationHelper.Notify(oldTicket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
+                        + "\">Unassignment from: " + ticket.Title + "</a>", true);
                 }
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -242,13 +253,14 @@ namespace cwagnerBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 Ticket ticket = db.Tickets.Find(ticketComment.TicketId);
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Url.Scheme);
                 var user = db.Users.Find(User.Identity.GetUserId());
                 ticketComment.AuthorId = user.Id;
                 ticketComment.Created = DateTimeOffset.UtcNow;
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
-                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A comment has been added to " + 
-                    ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
+                            + "\">" + ticket.Title + " has a new comment.</a>", true);
                 return RedirectToAction("Details", "Tickets", new { id = ticketComment.TicketId });
             }
 
@@ -265,13 +277,14 @@ namespace cwagnerBugTracker.Controllers
             if (ModelState.IsValid)
             {
                 Ticket ticket = db.Tickets.Find(ticketComment.TicketId);
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Url.Scheme);
                 var oldComment = db.TicketComments.Find(ticketComment.Id);
                 oldComment.Updated = DateTimeOffset.UtcNow;
                 oldComment.Body = ticketComment.Body;
                 db.Entry(oldComment).State = EntityState.Modified;
                 db.SaveChanges();
-                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A comment was edited in "
-                    + ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
+                            + "\">" + ticket.Title + " has an edited comment.</a>", true);
                 return RedirectToAction("Details", "Tickets", new { id = oldComment.TicketId });
             }
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FullName", ticketComment.AuthorId);
@@ -322,10 +335,11 @@ namespace cwagnerBugTracker.Controllers
                     image.SaveAs(Path.Combine(absPath, attachment.LocalFileName)); //save image
                 }
                 Ticket ticket = db.Tickets.Find(attachment.TicketId);
+                var callbackUrl = Url.Action("Details", "Tickets", new { id = ticket.Id }, protocol: Request.Url.Scheme);
                 db.TicketAttachments.Add(attachment);
                 db.SaveChanges();
-                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "A file was added to "
-                    + ticket.Title, true);
+                notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
+                            + "\">A file was added to " + ticket.Title + "</a>", true);
                 return RedirectToAction("Details", "Tickets", new { id = attachment.TicketId });
             }
             return View(attachment);

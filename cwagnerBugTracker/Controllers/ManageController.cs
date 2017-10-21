@@ -10,6 +10,7 @@ using cwagnerBugTracker.Models;
 
 namespace cwagnerBugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class ManageController : Controller
     {

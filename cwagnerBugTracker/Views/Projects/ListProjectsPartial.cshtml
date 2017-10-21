@@ -1,55 +1,47 @@
 ﻿@model IEnumerable<cwagnerBugTracker.Models.Project>
-<div class="table-responsive m-t-40">
-    <table class="table table-bordered table-striped" id="projectsTable" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                @*<th>
-                    @Html.DisplayNameFor(model => model.Archived)
-                </th>*@
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+
+<thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @item.Created.ToString("d")
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.Archived)
-                    </td>*@
-                    <td>
-                        @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
-                        {
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) 
-                            <span> | </span>
-                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                            <span> | </span>
+        <tr>
+            <td>
+                @item.Created.ToString("d")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    <span> | </span>
+                        @Html.ActionLink("Details", "Details", new { id = item.Id })
+                        <span> | </span>
                             @Html.ActionLink("Assign", "EditProjectUsers", new { id = item.Id })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                }
+                else
+                {
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                }
+            </td>
+        </tr>
+    }
+</tbody>
+

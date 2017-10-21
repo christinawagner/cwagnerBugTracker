@@ -29,17 +29,11 @@
                                     @foreach (var item in Model)
                                     {
                                         <tr class="unread">
-                                            <td style="width:40px">
-                                                <div class="checkbox">
-                                                    <input type="checkbox" id="checkbox0" value="check">
-                                                    <label for="checkbox0"></label>
-                                                </div>
-                                            </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Sent)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Message)
+                                                @Html.Raw(item.Message)
                                             </td>
                                         </tr>
                                     }
@@ -54,4 +48,3 @@
         </div>
     </div>
 </div>
-
