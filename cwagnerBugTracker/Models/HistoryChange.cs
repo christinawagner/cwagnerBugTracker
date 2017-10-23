@@ -10,6 +10,7 @@ namespace cwagnerBugTracker.Models
         public string OldValue { get; set; }
         [Display(Name = "Changed To")]
         public string NewValue { get; set; }
+        [Display(Name ="History")]
         public int TicketHistoryId { get; set; }
 
         public virtual TicketHistory TicketHistory { get; set; }

@@ -127,13 +127,13 @@
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <input type="text" id="Body" name="Body" class="form-control" placeholder="Add a comment" />
-                            <div class="field text-center">
-                                <input type="submit" class="btn btn-lg btn-darker" />
+                            <div class="price-row field text-center">
+                                <button class="btn btn-success waves-effect waves-light m-t-20" type="submit">Submit</button>
                             </div>
                         </div>
                     }
                 }
-
+                <br />
                 @foreach (var item in Model.Comments)
                 {
                     <div class="row" data-id="@item.Id">
@@ -158,9 +158,9 @@
                                             <div class="field">
                                                 <input type="text" id="Body" name="Body" class="form-control" value="@item.Body" />
                                             </div>
-                                            <div class="field text-center">
-                                                <button onclick="toggleCommentEdit(@item.Id)" type="button" class="btn btn-lg btn-light">Cancel</button>
-                                                <button type="submit" class="btn btn-lg btn-darker">Submit</button>
+                                            <div class="price-row field text-center">
+                                                <button onclick="toggleCommentEdit(@item.Id)" type="button" class="btn waves-effect waves-light m-t-20 btn-light">Cancel</button>
+                                                <button type="submit" class="btn btn-success waves-effect waves-light m-t-20">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -192,8 +192,8 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" value="@Model.Id" name="ticketId" />
                     <input name="image" type="file" class="form-control" required />
-                    <div class="field text-center">
-                        <input type="submit" class="btn btn-lg btn-darker" />
+                    <div class="price-row field text-center">
+                        <button class="btn btn-success waves-effect waves-light m-t-20" type="submit">Submit</button>
                     </div>
                 }
                 @foreach (var item in Model.Attachments)

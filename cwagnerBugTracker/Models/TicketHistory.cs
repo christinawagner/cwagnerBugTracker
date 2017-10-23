@@ -7,6 +7,7 @@ namespace cwagnerBugTracker.Models
     public class TicketHistory
     {
         public int Id { get; set; }
+        [Display(Name = "Ticket")]
         public int TicketId { get; set; }
         public DateTimeOffset Created { get; set; }
         [Display(Name = "Change Made By")]
