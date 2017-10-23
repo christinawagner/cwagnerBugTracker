@@ -67,7 +67,6 @@ namespace cwagnerBugTracker.Models
         [Display(Name = "Created By")]
         public string CreatedById { get; set; }
         [Display(Name = "Assigned To")]
-        [Audit]
         public string AssignToUserId { get; set; }
 
         [Audit]

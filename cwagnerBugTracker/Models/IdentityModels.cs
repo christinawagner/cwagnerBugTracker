@@ -13,9 +13,8 @@ namespace cwagnerBugTracker.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TimeZone { get; set; }
-        //if template has profile picture capability
-        //public string ProfilePic { get; set; }
-        
+        public string ProfilePic { get; set; }
+
         public string FullName
         {
             get
@@ -47,6 +46,7 @@ namespace cwagnerBugTracker.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             userIdentity.AddClaim(new Claim("FullName", FullName));
+            userIdentity.AddClaim(new Claim("ProfilePic", ProfilePic??string.Empty));
             return userIdentity;
         }
     }

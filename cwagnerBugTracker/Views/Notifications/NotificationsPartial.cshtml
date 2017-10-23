@@ -1,14 +1,38 @@
 ﻿@model IEnumerable<cwagnerBugTracker.Models.Notification>
 
-<table class="table table-hover no-wrap">
-    <tbody>
-        @foreach (var item in Model)
+<a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="mdi mdi-message"></i>
+    <div class="notify">
+        @if (Model.Any())
         {
-            <tr class="unread">
-                <td>
-                    @Html.Raw(item.Message)
-                </td>
-            </tr>
+            <span class="heartbit"></span>
+            <span class="point"></span>
         }
-    </tbody>
-</table>
+    </div>
+</a>
+<div class="dropdown-menu dropdown-menu-right mailbox scale-up">
+    <ul>
+        <li>
+            <div class="drop-title">Notifications</div>
+        </li>
+        <li>
+            <div class="message-center">
+                <table class="table table-hover no-wrap">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="unread" data-notification-id="@item.Id">
+                                <td>
+                                    @Html.Raw(item.Message)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        <li>
+            <a class="nav-link text-center" href="@Url.Action("Index", "Notifications")"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+        </li>
+    </ul>
+</div>

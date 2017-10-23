@@ -13,7 +13,6 @@ namespace cwagnerBugTracker.Helpers
 
         public void Notify(string userId, string subject, string message, bool sendEmail)
         {
-            
 
             var notification = new Notification
             {

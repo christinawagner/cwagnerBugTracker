@@ -1,183 +1,171 @@
 ﻿@using Microsoft.AspNet.Identity;
 @using cwagnerBugTracker.Extensions
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <!-- Favicon icon -->
-        <link rel="icon" type="image/png" sizes="16x16" href="~/favicon.ico">
-        <title>C. Wagner | Bug Tracker</title>
-        <!-- Bootstrap Core CSS -->
-        <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Custom CSS -->
-        <link href="~/material/css/style.css" rel="stylesheet">
-        <!-- You can change the theme colors from here -->
-        <link href="~/material/css/colors/red.css" rel="stylesheet" />
-        <!--multiselect list-->
-        <link href="~/assets/multiselect/multiselect.css" rel="stylesheet" />
-        <link href="~/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
-    <body class="fix-sidebar fix-header card-no-border">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon.ico">
+    <title>C. Wagner | Bug Tracker</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="~/material/css/style.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="~/material/css/colors/red.css" rel="stylesheet" />
+    <!--multiselect list-->
+    <link href="~/assets/multiselect/multiselect.css" rel="stylesheet" />
+    <link href="~/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="fix-sidebar fix-header card-no-border">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
         <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
+        <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
-        <div class="preloader">
-            <svg class="circular" viewBox="25 25 50 50">
-                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
-            </svg>
-        </div>
-        <!-- ============================================================== -->
-        <!-- Main wrapper - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <div id="main-wrapper">
-            <!-- ============================================================== -->
-            <!-- Topbar header - style you can find in pages.scss -->
-            <!-- ============================================================== -->
-            <header class="topbar">
-                <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- ============================================================== -->
+                <!-- Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                        <!-- Logo icon -->
+                        <b>
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <i class="fa fa-bug fa-lg" style="color:white"></i>
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span>
+                            <!-- Light Logo text -->
+                            <span style="color:white;">Bug Tracker</span>
+                        </span>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse">
                     <!-- ============================================================== -->
-                    <!-- Logo -->
+                    <!-- toggle and nav items -->
                     <!-- ============================================================== -->
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                            <!-- Logo icon -->
-                            <b>
-                                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                                <i class="fa fa-bug fa-lg" style="color:white"></i>
-                            </b>
-                            <!--End Logo icon -->
-                            <!-- Logo text -->
-                            <span>
-                                <!-- Light Logo text -->
-                                <span style="color:white;">Bug Tracker</span>
-                            </span>
-                        </a>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- End Logo -->
-                    <!-- ============================================================== -->
-                    <div class="navbar-collapse">
+                    <ul class="navbar-nav mr-auto mt-md-0">
+                        <!-- This is  -->
+                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
+                        <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
                         <!-- ============================================================== -->
-                        <!-- toggle and nav items -->
+                        <!-- Search -->
                         <!-- ============================================================== -->
-                        <ul class="navbar-nav mr-auto mt-md-0">
-                            <!-- This is  -->
-                            <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
-                            <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
-                            <!-- ============================================================== -->
-                            <!-- Search -->
-                            <!-- ============================================================== -->
-                            @*<li class="nav-item hidden-sm-down search-box">
-                                    <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                                    <form class="app-search">
-                                        <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
-                                    </form>
-                                </li>*@
-                            <!-- ============================================================== -->
-                            <!-- Messages (DELETED - Windows icon, carousel, accordion, contact us...)-->
-                            <!-- ============================================================== -->
+                        @*<li class="nav-item hidden-sm-down search-box">
+                                <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
+                                <form class="app-search">
+                                    <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
+                                </form>
+                            </li>*@
+                        <!-- ============================================================== -->
+                        <!-- Messages (DELETED - Windows icon, carousel, accordion, contact us...)-->
+                        <!-- ============================================================== -->
 
-                        </ul>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- User profile and search -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav my-lg-0">
                         <!-- ============================================================== -->
-                        <!-- User profile and search -->
+                        <!-- Comment -->
                         <!-- ============================================================== -->
-                        <ul class="navbar-nav my-lg-0">
-                            <!-- ============================================================== -->
-                            <!-- Comment -->
-                            <!-- ============================================================== -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-message"></i>
-                                    <div class="notify">
-                                        <span class="heartbit"></span>
-                                        <span class="point"></span>
-                                    </div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right mailbox scale-up">
-                                    <ul>
-                                        <li>
-                                            <div class="drop-title">Notifications</div>
-                                        </li>
-                                        <li>
-                                            <div class="message-center" id="notifications">
-                                                @Html.Action("NotificationsPartial", "Notifications")
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="nav-link text-center" href="@Url.Action("Index", "Notifications")"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- ============================================================== -->
-                            <!-- End Comment -->
-                            <!-- ============================================================== -->
-                            <!-- ============================================================== -->
-                            <!-- Messages (DELETED - email messages)-->
-                            <!-- ============================================================== -->
-                            <!-- ============================================================== -->
-                            <!-- Profile -->
-                            <!-- ============================================================== -->
-                            @*<li class="nav-item dropdown">
+                        <li class="nav-item dropdown" id="notifications">
+                            @Html.Action("NotificationsPartial", "Notifications")
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End Comment -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Messages (DELETED - email messages)-->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- Profile -->
+                        <!-- ============================================================== -->
+                        @*<li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/assets/profilePics/" alt="user" class="profile-pic" /></a>
                                 <div class="dropdown-menu dropdown-menu-right scale-up">
                                     @Html.Partial("_LoginPartial")
                                 </div>e
                             </li>*@
-                            <!-- ============================================================== -->
-                            <!-- Language (DELETED)-->
-                            <!-- ============================================================== -->
-                        </ul>
+                        <!-- ============================================================== -->
+                        <!-- Language (DELETED)-->
+                        <!-- ============================================================== -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- User profile -->
+                <div class="user-profile" @*style="background: url(~/assets/images/background/user-info.jpg) no-repeat;"*@>
+                    <!-- User profile image -->
+                    <div class="profile-img">
+                        @if (string.IsNullOrWhiteSpace(User.Identity.ProfilePicture()))
+                        {
+                            <img src="~/assets/profilePics/superman.jpg" class="img-circle" width="150" />
+                        }
+                        else
+                        {
+                            <img src="@User.Identity.ProfilePicture()" class="img-circle" width="150" />
+                        }
                     </div>
-                </nav>
-            </header>
-            <!-- ============================================================== -->
-            <!-- End Topbar header -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Left Sidebar - style you can find in sidebar.scss  -->
-            <!-- ============================================================== -->
-            <aside class="left-sidebar">
-                <!-- Sidebar scroll-->
-                <div class="scroll-sidebar">
-                    <!-- User profile -->
-                    <div class="user-profile" @*style="background: url(~/assets/images/background/user-info.jpg) no-repeat;"*@>
-                        <!-- User profile image -->
-                        <div class="profile-img"> <img src="~/assets/profilePics/superman.jpg" alt="user" /> </div>
-                        <!-- User profile text-->
-                        <div class="profile-text">
-                            <a href="javascript:void(0)" style="cursor:default;">@User.Identity.GetFullName()</a>
-                        </div>
+                    <!-- User profile text-->
+                    <div class="profile-text">
+                        <a href="javascript:void(0)" style="cursor:default;">@User.Identity.GetFullName()</a>
                     </div>
-                    <!-- End User profile text-->
-                    <!-- Sidebar navigation-->
-                    <nav class="sidebar-nav">
-                        <ul id="sidebarnav">
-                            @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
-                            {
-                                <li>
-                                    <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">VIEW ALL</span></a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li><a class="waves-effect waves-dark" href="@Url.Action("ProjectList", "Projects")">Projects</a></li>
-                                        <li><a class="waves-effect waves-dark" href="@Url.Action("ArchivedProjects", "Projects")">Archived Projects</a></li>
-                                        @if (!User.IsInRole(Domain.Roles.ProjectManager))
-                                        {
-                                            <li><a class="waves-effect waves-dark" href="@Url.Action("AllTickets", "Tickets")">Tickets</a></li>
-                                        }
-                                    </ul>
-                                </li>
+                </div>
+                <!-- End User profile text-->
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
+                        {
+                            <li>
+                                <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">VIEW ALL</span></a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a class="waves-effect waves-dark" href="@Url.Action("ProjectList", "Projects")">Projects</a></li>
+                                    <li><a class="waves-effect waves-dark" href="@Url.Action("ArchivedProjects", "Projects")">Archived Projects</a></li>
+                                    @if (!User.IsInRole(Domain.Roles.ProjectManager))
+                                    {
+                                        <li><a class="waves-effect waves-dark" href="@Url.Action("AllTickets", "Tickets")">Tickets</a></li>
+                                    }
+                                </ul>
+                            </li>
 
                                 <li class="nav-devider"></li>
                                 <li>
@@ -186,181 +174,192 @@
                                         <li><a href="@Url.Action("Create", "Projects")">New Project</a></li>
                                     </ul>
                                 </li>
-                            }
-                            @if (User.IsInRole(Domain.Roles.Submitter))
-                            {
-                                <li class="nav-devider"></li>
+                        }
+                        @if (User.IsInRole(Domain.Roles.Submitter))
+                        {
+                            <li class="nav-devider"></li>
                                 <li>
                                     <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-multiple"></i><span class="hide-menu">CREATE NEW</span></a>
                                     <ul aria-expanded="false" class="collapse">
                                         <li><a href="@Url.Action("Create", "Tickets")">New Ticket</a></li>
                                     </ul>
                                 </li>
-                            }
-                            @if (User.IsInRole(Domain.Roles.Admin))
-                            {
-                                <li class="nav-devider"></li>
+                        }
+                        @if (User.IsInRole(Domain.Roles.Admin))
+                        {
+                            <li class="nav-devider"></li>
                                 <li>
                                     <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">MANAGE</span></a>
                                     <ul aria-expanded="false" class="collapse">
                                         <li><a href="@Url.Action("Index", "Admin")">View User Info & Roles</a></li>
                                     </ul>
                                 </li>
-                            }
-                            @*<li>
-                                <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Sample Pages</span></a>
-                                <ul aria-expanded="false" class="collapse">
-                                    <li><a href="~/material/starter-kit.html">Starter Kit</a></li>
-                                    <li><a href="~/material/pages-blank.html">Blank page</a></li>*@
-                            @*<li>
-                                    <a href="#" class="has-arrow">Authentication <span class="label label-rounded label-success">6</span></a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li><a href="~/material/pages-login.html">Login 1</a></li>
-                                        <li><a href="~/material/pages-login-2.html">Login 2</a></li>
-                                        <li><a href="~/material/pages-register.html">Register</a></li>
-                                        <li><a href="~/material/pages-register2.html">Register 2</a></li>
-                                        <li><a href="~/material/pages-lockscreen.html">Lockscreen</a></li>
-                                        <li><a href="~/material/pages-recover-password.html">Recover password</a></li>
-                                    </ul>
-                                </li>*@
-                            @*<li><a href="~/material/pages-profile.html">Profile page</a></li>
-                                <li><a href="~/material/pages-animation.html">Animation</a></li>
-                                <li><a href="~/material/pages-fix-innersidebar.html">Sticky Left sidebar</a></li>
-                                <li><a href="~/material/pages-gallery.html">Gallery</a></li>
-                                <li><a href="~/material/pages-faq.html">Faqs</a></li>*@
-                            @*<li>
-                                    <a href="#" class="has-arrow">Error Pages</a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li><a href="~/material/pages-error-400.html">400</a></li>
-                                        <li><a href="~/material/pages-error-403.html">403</a></li>
-                                        <li><a href="~/material/pages-error-404.html">404</a></li>
-                                        <li><a href="~/material/pages-error-500.html">500</a></li>
-                                        <li><a href="~/material/pages-error-503.html">503</a></li>
-                                    </ul>
-                                </li>*@
-                            @*</ul>
-                                </li>*@
-                        </ul>
-                    </nav>
-                    <!-- End Sidebar navigation -->
-                </div>
-                <!-- End Sidebar scroll-->
-                <!-- Bottom points-->
-                <div class="sidebar-footer">
-                    <div class="sidebar-footer">
-                        <!-- item-->
-                        <a href="@Url.Action("Index", "Manage", routeValues: null)" class="link" data-toggle="tooltip" title="Profile"><i class="ti-settings"></i></a>
-                        <!-- item-->
-                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <a href="javascript:document.getElementById('logoutForm').submit()" class="link" data-toggle="tooltip" title="Logout"><i class="fa fa-power-off"></i></a>
                         }
-                    </div>
+                        @*<li>
+                            <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Sample Pages</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="~/material/starter-kit.html">Starter Kit</a></li>
+                                <li><a href="~/material/pages-blank.html">Blank page</a></li>*@
+                        @*<li>
+                                <a href="#" class="has-arrow">Authentication <span class="label label-rounded label-success">6</span></a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a href="~/material/pages-login.html">Login 1</a></li>
+                                    <li><a href="~/material/pages-login-2.html">Login 2</a></li>
+                                    <li><a href="~/material/pages-register.html">Register</a></li>
+                                    <li><a href="~/material/pages-register2.html">Register 2</a></li>
+                                    <li><a href="~/material/pages-lockscreen.html">Lockscreen</a></li>
+                                    <li><a href="~/material/pages-recover-password.html">Recover password</a></li>
+                                </ul>
+                            </li>*@
+                        @*<li><a href="~/material/pages-profile.html">Profile page</a></li>
+                            <li><a href="~/material/pages-animation.html">Animation</a></li>
+                            <li><a href="~/material/pages-fix-innersidebar.html">Sticky Left sidebar</a></li>
+                            <li><a href="~/material/pages-gallery.html">Gallery</a></li>
+                            <li><a href="~/material/pages-faq.html">Faqs</a></li>*@
+                        @*<li>
+                                <a href="#" class="has-arrow">Error Pages</a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a href="~/material/pages-error-400.html">400</a></li>
+                                    <li><a href="~/material/pages-error-403.html">403</a></li>
+                                    <li><a href="~/material/pages-error-404.html">404</a></li>
+                                    <li><a href="~/material/pages-error-500.html">500</a></li>
+                                    <li><a href="~/material/pages-error-503.html">503</a></li>
+                                </ul>
+                            </li>*@
+                        @*</ul>
+                            </li>*@
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+            <!-- Bottom points-->
+            <div class="sidebar-footer">
+                <div class="sidebar-footer">
+                    <!-- item-->
+                    <a href="@Url.Action("Index", "Manage", routeValues: null)" class="link" data-toggle="tooltip" title="Profile"><i class="ti-settings"></i></a>
+                    <!-- item-->
+                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a href="javascript:document.getElementById('logoutForm').submit()" class="link" data-toggle="tooltip" title="Logout"><i class="fa fa-power-off"></i></a>
+                    }
                 </div>
-                <!-- End Bottom points-->
-            </aside>
+            </div>
+            <!-- End Bottom points-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
             <!-- ============================================================== -->
-            <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+            <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Page wrapper  -->
-            <!-- ============================================================== -->
-            <div class="page-wrapper">
+            <div class="container-fluid">
                 <!-- ============================================================== -->
-                <!-- Container fluid  -->
+                <!-- Bread crumb and right sidebar toggle -->
                 <!-- ============================================================== -->
-                <div class="container-fluid">
-                    <!-- ============================================================== -->
-                    <!-- Bread crumb and right sidebar toggle -->
-                    <!-- ============================================================== -->
-                    <div class="row page-titles">
-                        @Html.Action("TicketCounter", "Tickets")
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- End Bread crumb and right sidebar toggle -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Start Page Content -->
-                    <!-- ============================================================== -->
-                    @RenderBody()
-                    <!-- ============================================================== -->
-                    <!-- End PAge Content -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Right sidebar -->
-                    <!-- ============================================================== -->
-                    <!-- .right-sidebar -->
-                    <!--(DELETED - service panel)-->
-                    <!-- ============================================================== -->
-                    <!-- End Right sidebar -->
-                    <!-- ============================================================== -->
+                <div class="row page-titles">
+                    @Html.Action("TicketCounter", "Tickets")
                 </div>
                 <!-- ============================================================== -->
-                <!-- End Container fluid  -->
+                <!-- End Bread crumb and right sidebar toggle -->
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
-                <!-- footer -->
+                <!-- Start Page Content -->
                 <!-- ============================================================== -->
-                <footer class="footer">
-                    © 2017 Christina Wagner
-                </footer>
+                @RenderBody()
                 <!-- ============================================================== -->
-                <!-- End footer -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <!--(DELETED - service panel)-->
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
                 <!-- ============================================================== -->
             </div>
             <!-- ============================================================== -->
-            <!-- End Page wrapper  -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer">
+                © 2017 Christina Wagner
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
             <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
-        <!-- End Wrapper -->
+        <!-- End Page wrapper  -->
         <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- All Jquery -->
-        <!-- ============================================================== -->
-        <script src="~/assets/plugins/jquery/jquery.min.js"></script>
-        <!-- Bootstrap tether Core JavaScript -->
-        <script src="~/assets/plugins/bootstrap/js/popper.min.js"></script>
-        <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-        <!-- slimscrollbar scrollbar JavaScript -->
-        <script src="~/material/js/jquery.slimscroll.js"></script>
-        <!--Wave Effects -->
-        <script src="~/material/js/waves.js"></script>
-        <!--Menu sidebar -->
-        <script src="~/material/js/sidebarmenu.js"></script>
-        <!--stickey kit -->
-        <script src="~/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
-        <script src="~/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
-        <!--Custom JavaScript -->
-        <script src="~/material/js/custom.min.js"></script>
-        <!-- ============================================================== -->
-        <!-- Style switcher -->
-        <!-- ============================================================== -->
-        <script src="~/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
-        <script src="~/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-        <!--Reference the SignalR library. -->
-        <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
-        <!--Reference the autogenerated SignalR hub script. -->
-        <script src="~/signalr/hubs"></script>
-        <!--SignalR script to update the notifications dropdown.-->
-        <script>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="~/assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/material/js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="~/material/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/material/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="~/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/material/js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <script src="~/assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+    <script src="~/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <!--Reference the SignalR library. -->
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <!--Reference the autogenerated SignalR hub script. -->
+    <script src="~/signalr/hubs"></script>
+    <!--SignalR script to update the notifications dropdown.-->
+    <script>
         $(function () {
+            window.refreshNotifications = function () {
+                $.get("@Url.Action("NotificationsPartial", "Notifications")", function (response) {
+                    $("#notifications").html(response)
+                });
+            }
+
+            $(".mailbox .unread a").click(function (e) {
+                e.preventDefault();
+                var href = this.href;
+                $.post("@Url.Action("MarkRead", "Notifications")", { notificationId: $(e.target).closest('tr.unread').data("notification-id") }, function (response) {
+                    window.location = href;
+                })
+            });
             // Reference the auto-generated proxy for the hub.
             var hub = $.connection.notificationHub;
             // Create a function that the hub can call back to display messages.
             hub.client.updateNotifications = function (name, message) {
                 // Add the message to the page.
-                $.get("@Url.Action("NotificationsPartial", "Notifications")", function (response) {
-                    $("#notifications").html(response)
-                });
+                refreshNotifications();
             };
 
             // Start the connection.
             $.connection.hub.start().done(function () {
             });
         });
-        </script>
-        @RenderSection("scripts", required: false)
-    </body>
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
 </html>

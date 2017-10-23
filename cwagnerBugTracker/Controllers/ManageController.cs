@@ -7,6 +7,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using cwagnerBugTracker.Models;
+using System.IO;
+using System.Drawing;
+using System.Web.Helpers;
 
 namespace cwagnerBugTracker.Controllers
 {
@@ -14,6 +17,7 @@ namespace cwagnerBugTracker.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -33,9 +37,9 @@ namespace cwagnerBugTracker.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,6 +79,82 @@ namespace cwagnerBugTracker.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult AddProfilePic()
+        {
+            return RedirectToAction("Index");
+        }
+
+        //POST: profile pic upload
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddProfilePic(HttpPostedFileBase profilePic)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (profilePic == null)
+            {
+                ModelState.AddModelError("ProfilePic", "Attachment file is required.");
+            }
+            if (profilePic != null && profilePic.ContentLength > 0)
+            {
+                //check the file extension from the file name to make sure it’s an image
+                var ext = Path.GetExtension(profilePic.FileName).ToLower();
+                if (ext != ".png" && ext != ".jpg" && ext != ".jpeg" && ext != ".gif" && ext != ".bmp")
+                    ModelState.AddModelError("ProfilePic", "Invalid image Format.");
+                else
+                {
+                    var image = new WebImage(profilePic.InputStream);
+
+                    var ratio = (double)image.Width / (double)image.Height;
+
+                    if (ratio < .9d || ratio > 1.1d)
+                    {
+                        ModelState.AddModelError("ProfilePic", "Profile image must be square.");
+                    }
+
+                    if (image.Width < 64 || image.Height < 64)
+                    {
+                        ModelState.AddModelError("ProfilePic", "Profile image must be at least 64 x 64 pixels");
+                    }
+
+                    image = image.Resize(150, 150, false);
+
+                    if (ModelState.IsValid)
+                    {
+                        if (profilePic != null)
+                        {
+
+                            if (!string.IsNullOrWhiteSpace(user.ProfilePic))
+                            {
+                                System.IO.File.Delete(Server.MapPath($"~{user.ProfilePic}"));
+                            }
+
+                            var filePath = $"/assets/profilePics/{user.Id}/"; //relative server path
+                            var absPath = Server.MapPath("~" + filePath); // path on physical drive on server
+                            Directory.CreateDirectory(absPath);
+                            image.Save(Path.Combine(absPath, profilePic.FileName)); //save image
+                            user.ProfilePic = filePath + profilePic.FileName; // media url for relative path
+                            db.SaveChanges();
+                            var signinManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                            signinManager.SignIn(user, true, false);
+                        }
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+
+            var model = new IndexViewModel
+            {
+                HasPassword = HasPassword(),
+                PhoneNumber = user.PhoneNumber,
+                TwoFactor = user.TwoFactorEnabled,
+                Logins = await UserManager.GetLoginsAsync(user.Id),
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(user.Id)
+            };
+            return View("Index", model);
         }
 
         //
@@ -367,7 +447,7 @@ namespace cwagnerBugTracker.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -419,6 +499,6 @@ namespace cwagnerBugTracker.Controllers
             ChangeNameSuccess
         }
 
-#endregion
+        #endregion
     }
 }

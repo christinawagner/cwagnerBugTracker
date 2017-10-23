@@ -210,7 +210,10 @@ namespace cwagnerBugTracker.Controllers
             {
                 ticket.Created = ticket.Created;
                 ticket.Updated = DateTimeOffset.UtcNow;
-                db.Entry(ticket).State = EntityState.Modified;
+
+                db.Tickets.Attach(ticket);
+                //explicitly load the new assigned to user so the name can be used for history changes
+                db.Entry(ticket).Reference(p => p.AssignToUser).Load();
 
                 var oldTicket = db.Tickets.AsNoTracking().First(t => t.Id == ticket.Id);
                 var ticketHistory = historyHelper.GetHistory(oldTicket, ticket, User.Identity.GetUserId());
@@ -221,17 +224,22 @@ namespace cwagnerBugTracker.Controllers
                     ticket.Histories.Add(ticketHistory);
                     if (!String.IsNullOrWhiteSpace(ticket.AssignToUserId))
                     {
-                        notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl 
+                        notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
                             + "\">" + ticket.Title + " has changed.</a>", true);
                     }
                 }
                 if (oldTicket.AssignToUserId != ticket.AssignToUserId && !String.IsNullOrWhiteSpace(ticket.AssignToUserId))
                 {
-                    notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl 
+                    notificationHelper.Notify(ticket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
                         + "\">New assignment: " + ticket.Title + "</a>", true);
-                    notificationHelper.Notify(oldTicket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
-                        + "\">Unassignment from: " + ticket.Title + "</a>", true);
+                    if (!string.IsNullOrWhiteSpace(oldTicket.AssignToUserId))
+                    {
+                        notificationHelper.Notify(oldTicket.AssignToUserId, "New Notification From BugTracker", "<a href=\"" + callbackUrl
+                            + "\">Unassignment from: " + ticket.Title + "</a>", true);
+                    }
                 }
+
+                db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

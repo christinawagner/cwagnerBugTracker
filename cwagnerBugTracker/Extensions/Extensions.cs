@@ -14,5 +14,11 @@ namespace cwagnerBugTracker.Extensions
             var claim = ((ClaimsIdentity)identity).FindFirst("FullName");
             return claim?.Value ?? string.Empty;
         }
+
+        public static string ProfilePicture(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("ProfilePic");
+            return claim?.Value ?? string.Empty;
+        }
     }
 }

@@ -17,6 +17,16 @@ namespace cwagnerBugTracker.Helpers
                 Created = DateTimeOffset.Now,
             };
 
+            if(oldTicket.AssignToUserId != newTicket.AssignToUserId)
+            {
+                ticketHistory.Changes.Add(new HistoryChange
+                {
+                    OldValue = !string.IsNullOrWhiteSpace(oldTicket.AssignToUser?.FullName) ? oldTicket.AssignToUser.FullName : "Unassigned",
+                    NewValue = !string.IsNullOrWhiteSpace(newTicket.AssignToUser?.FullName) ? newTicket.AssignToUser.FullName : "Unassigned",
+                    Property = "AssignedToUser"
+                });
+            }
+
             foreach (var property in typeof(Ticket).GetProperties().Where(p => p.GetCustomAttributes(typeof(AuditAttribute), false).Any()))
             {
                 var newVal = property.GetValue(newTicket) ?? string.Empty;
