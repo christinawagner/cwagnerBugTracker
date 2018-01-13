@@ -113,7 +113,7 @@ namespace cwagnerBugTracker.Controllers
                 case "Admin":
                     user = db.Users.Single(s => s.Email == "cwagner0604+admin@gmail.com");
                     break;
-                case "Project Manager":
+                case "ProjectManager":
                     user = db.Users.Single(s => s.Email == "cwagner0604+projectmanager@gmail.com");
                     break;
                 case "Developer":

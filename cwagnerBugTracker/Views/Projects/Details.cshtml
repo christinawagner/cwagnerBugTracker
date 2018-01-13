@@ -41,15 +41,21 @@
                     </table>
                 </div>
                 <p>
-                    @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
+                    @if (User.IsInRole(Domain.Roles.Admin))
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <span> | </span>
-                            @Html.ActionLink("Back to List", "Index");
+                        @Html.ActionLink("Create Ticket", "Create", "Tickets", new { id = Model.Id }, null) <span> | </span>
+                        @Html.ActionLink("Back to List", "Index");
+                    }
+                    else if (User.IsInRole(Domain.Roles.ProjectManager))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) <span> | </span>
+                        @Html.ActionLink("Back to List", "Index");
                     }
                     else if (User.IsInRole(Domain.Roles.Submitter))
                     {
                         @Html.ActionLink("Create Ticket", "Create", "Tickets", new { id = Model.Id }, null) <span> | </span>
-                            @Html.ActionLink("Back to List", "Index");
+                        @Html.ActionLink("Back to List", "Index");
                     }
                     else
                     {

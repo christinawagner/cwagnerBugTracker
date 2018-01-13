@@ -7,9 +7,6 @@
 <div class="card">
     <div class="card-body">
         <h2>All Tickets</h2>
-        <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
         <div class="table-responsive m-t-40">
             <table class="table table-bordered table-striped" id="ticketsTable" cellspacing="0" width="100%">
                 @Html.Action("ListTicketsPartial", new { tickets = Model })

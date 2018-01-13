@@ -200,6 +200,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Content Include="assets\javascript\markRead.js" />
+    <Content Include="assets\profilePics\1dc419e9-a47d-4c91-96a3-a7ae527a90a9\C.png" />
     <Content Include="assets\profilePics\superman.jpg" />
     <Content Include="assets\javascript\editDeleteComments.js" />
     <Content Include="assets\multiselect\multiselect.css" />
@@ -4166,6 +4167,7 @@
     <Content Include="Private.config" />
     <None Include="Properties\PublishProfiles\cwagner-bugtracker - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\cwagner-bugtracker - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wagnerBugTracker - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -31,7 +31,7 @@ namespace cwagnerBugTracker.Controllers
 
         public PartialViewResult ListProjectsPartial(List<Project> projects, bool showArchived = false)
         {
-            return PartialView(showArchived ? projects : projects.Where(p => !p.Archived).ToList());
+            return PartialView(showArchived ? projects.ToList() : projects.Where(p => !p.Archived).ToList());
         }
 
         // GET: Project list for all users

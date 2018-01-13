@@ -16,7 +16,7 @@
 </thead>
 <tbody>
     @foreach (var item in Model)
-            {
+    {
         <tr>
             <td>
                 @item.Created.ToString("d")
@@ -28,13 +28,28 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @if (User.IsInRole(Domain.Roles.Admin) || User.IsInRole(Domain.Roles.ProjectManager))
+                @if (User.IsInRole(Domain.Roles.Admin))
                 {
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id })
                     <span> | </span>
-                        @Html.ActionLink("Details", "Details", new { id = item.Id })
-                        <span> | </span>
-                            @Html.ActionLink("Assign", "EditProjectUsers", new { id = item.Id })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                    <span> | </span>
+                    @Html.ActionLink("Assign", "EditProjectUsers", new { id = item.Id })
+                    <span> | </span>
+                    @Html.ActionLink("Add Ticket", "Create", "Tickets", new { id = item.Id }, null)
+
+                }
+                else if (User.IsInRole(Domain.Roles.ProjectManager))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    <span> | </span>
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                    <span> | </span>
+                    @Html.ActionLink("Assign", "EditProjectUsers", new { id = item.Id })
+                }
+                else if (User.IsInRole(Domain.Roles.Submitter))
+                {
+                    @Html.ActionLink("Add Ticket", "Create", "Tickets", new { id = item.Id }, null)
                 }
                 else
                 {

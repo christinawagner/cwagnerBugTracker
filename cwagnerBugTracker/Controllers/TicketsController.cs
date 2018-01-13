@@ -97,18 +97,25 @@ namespace cwagnerBugTracker.Controllers
 
         // GET: Tickets/Create
         [AuthorizeRoles(Roles.Submitter, Roles.Admin)]
-        public ActionResult Create()
+        public ActionResult Create(Ticket ticket, int? id)
         {
-            var user = db.Users.Find(User.Identity.GetUserId());
-            ProjectAssignHelper helper = new ProjectAssignHelper();
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Projects");
+            }
+            else
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                ProjectAssignHelper helper = new ProjectAssignHelper();
 
-            //ViewBag.AssignToUserId = new SelectList(db.Users, "Id", "FirstName");
-            //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.ProjectId = new SelectList(helper.ListUserProjects(User.Identity.GetUserId()), "Id", "Title");
-
-            ViewBag.TicketPriority = new SelectList(TicketPriority.Low.ToSelectList(), "Value", "Text", TicketPriority.Low.ToString());
-            ViewBag.TicketType = new SelectList(TicketType.Bug.ToSelectList(), "Value", "Text", TicketType.Bug);
-            return View();
+                //ViewBag.AssignToUserId = new SelectList(db.Users, "Id", "FirstName");
+                //ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
+                //ViewBag.ProjectId = new SelectList(helper.ListUserProjects(User.Identity.GetUserId()), "Id", "Title");
+                ViewBag.ProjectId = id;
+                ViewBag.TicketPriority = new SelectList(TicketPriority.Low.ToSelectList(), "Value", "Text", TicketPriority.Low.ToString());
+                ViewBag.TicketType = new SelectList(TicketType.Bug.ToSelectList(), "Value", "Text", TicketType.Bug);
+                return View(ticket);
+            }
         }
 
         // POST: Tickets/Create
@@ -117,7 +124,7 @@ namespace cwagnerBugTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AuthorizeRoles(Roles.Submitter, Roles.Admin)]
-        public ActionResult Create([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,OwnerUserId")] Ticket ticket)
+        public ActionResult Create(Ticket ticket, int id)
         {
 
             if (ModelState.IsValid)
@@ -125,6 +132,7 @@ namespace cwagnerBugTracker.Controllers
                 ticket.TicketStatus = TicketStatus.Unassigned;
                 ticket.CreatedById = User.Identity.GetUserId();
                 ticket.Created = DateTimeOffset.UtcNow;
+                ticket.ProjectId = id;
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
